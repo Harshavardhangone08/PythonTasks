@@ -1,0 +1,3 @@
+Harsha 90000.0
+Vardhan 80000.0
+Jhon 70000.0

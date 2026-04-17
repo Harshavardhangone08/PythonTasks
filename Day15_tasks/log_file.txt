@@ -1,0 +1,7 @@
+INFO Start process
+ERROR Network
+INFO Retrying
+ERROR Network
+WARNING Slow response
+ERROR Database
+INFO Process completed
