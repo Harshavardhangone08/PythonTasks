@@ -72,6 +72,20 @@ y_pred=LRmodel.predict(X_test)
 Model_eval(y_test,y_pred,"Linear Regression")
 
 #============================================================
+#                Lasso Regression
+#============================================================
+from sklearn.linear_model import Lasso
+
+lasso_model=Lasso()
+print('-'*80)
+print(lasso_model)
+#training the model
+lasso_model.fit(X_train,y_train)
+y_pred=lasso_model.predict(X_test)
+# To calculate algorithm score
+Model_eval(y_test,y_pred,"Lasso Regression")
+
+#============================================================
 #                Ridge Regression
 #============================================================
 from sklearn.linear_model import Ridge
@@ -117,7 +131,7 @@ Model_eval(y_test,y_pred,"Decision tree regressor")
 # ============================================================
 from sklearn.ensemble import RandomForestRegressor
 
-random_model=RandomForestRegressor(random_state=42)
+random_model=RandomForestRegressor()
 print('-'*80)
 print(random_model)
 #training the model
@@ -131,7 +145,7 @@ Model_eval(y_test,y_pred,"Random Forest regressor")
 # ============================================================
 from sklearn.ensemble import GradientBoostingRegressor
 
-grad_model=GradientBoostingRegressor(random_state=42)
+grad_model=GradientBoostingRegressor()
 print('-'*80)
 print(grad_model)
 #training the model
@@ -153,3 +167,32 @@ KNN_model.fit(X_train,y_train)
 y_pred=KNN_model.predict(X_test)
 # To calculate algorithm score
 Model_eval(y_test,y_pred,"K-Nearest Neighbors Regressor")
+
+# ============================================================
+#               Bagging Regressor
+# ============================================================
+from sklearn.ensemble import BaggingRegressor
+
+bagging_model=BaggingRegressor()
+print('-'*80)
+print(bagging_model)
+#training the model
+bagging_model.fit(X_train,y_train)
+y_pred=bagging_model.predict(X_test)
+#To calculate algorithm score
+Model_eval(y_test,y_pred,"Bagging Regressor")
+
+# ============================================================
+#               XGBoost Regressor
+# ============================================================
+from xgboost import XGBRegressor
+
+XGB_model=XGBRegressor()
+print('-'*80)
+#print(XGB_model)
+#training the model
+XGB_model.fit(X_train,y_train)
+y_pred=XGB_model.predict(X_test)
+#To evaluate model 
+Model_eval(y_test,y_pred,"XGBoost Regressor")
+
