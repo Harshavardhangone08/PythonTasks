@@ -42,22 +42,22 @@ Tasks:
 ● Use NumPy to calculate: 
 ○ minimum selling price 
 ○ maximum selling price 
-○ average selling price '''
-
+○ average selling price 
+'''
 #Load the dataset using Pandas
 df = pd.read_csv("cardata.csv")
 #Display: First 5 rows
 print(f"Displaying First 5 rows:\n{df.head()}")
-print("---------------------------------------------------------------------------------")
+print("==============================================================")
 print(f"Displaying last 5 rows:\n{df.tail()}") #Last 5 rows
-print("---------------------------------------------------------------------------------")
+print("==============================================================")
 print(f"Column names:\n{df.columns}") #Column names
 print()
 print(f"Shapes of Dataset:{df.shape}\n") #Shape of dataset
-print("---------------------------------------------------------------------------------")
+print("==============================================================")
 # Checking data types of all columns.
 print(df.dtypes) 
-print("---------------------------------------------------------------------------------")
+print("==============================================================")
 #Check for missing values in: Selling_Price, Present_Price, Kms_Driven, Fuel_Type
 print("Missing values:")
 print(df[["Selling_Price","Present_Price","Kms_Driven","Fuel_Type"]].isnull().sum())
@@ -71,7 +71,7 @@ df["Present_Price"]=df["Present_Price"].fillna(df["Present_Price"].mean())
 df["Kms_Driven"]=df["Kms_Driven"].fillna(df["Kms_Driven"].mean())
 # Fuel_Type → mode
 df["Fuel_Type"]=df["Fuel_Type"].fillna(df["Fuel_Type"].mode()[0])
-print("---------------------------------------------------------------------------------")
+print("==============================================================")
 
 #Converting numeric columns to proper numeric type: Selling_Price, Present_Price, Kms_Driven, Year 
 numeric=["Selling_Price","Present_Price","Kms_Driven","Year"]
@@ -81,7 +81,7 @@ print(df.dtypes)
 #Convert Selling_Price and Kms_Driven into NumPy arrays.
 S_price=df["Selling_Price"].to_numpy()
 KMs=df["Kms_Driven"].to_numpy()
-print("---------------------------------------------------------------------------------")
+print("==============================================================")
 # minimum selling price 
 min_S_price=S_price.min()
 print(f"Minimun Selling Price: {min_S_price}")
@@ -257,7 +257,6 @@ data = data.replace(np.nan, 0)
 # Take first 50 rows
 data = data.head(50)
 print("(S5)Taking smaller sample for 50 rows/n", data)
-print("====================================================================")
 print("====================================================================")
 
 # Convert to NumPy arrays
