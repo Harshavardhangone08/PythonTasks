@@ -43,7 +43,7 @@ sc=StandardScaler()
 #Fit and transform on training data
 X_train=sc.fit_transform(X_train)
 
-#transform set data
+#transform test data
 X_test=sc.transform(X_test)
 
 # function for model evaluation
