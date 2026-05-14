@@ -39,7 +39,6 @@ print(df.isnull().sum())
 print('-'*100)
 print(df.Dependents.value_counts())
 #To replace 3+ values to 4
-df.replace(to_replace='3+',value='4', inplace=True)
 df['Dependents']=df['Dependents'].replace('3+',4)
 df['Dependents']=df['Dependents'].astype(int)
 #df['Dependents']=pd.to_numeric(df['Dependents'])
