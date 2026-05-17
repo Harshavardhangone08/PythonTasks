@@ -1,8 +1,8 @@
 # ======================================================================================
-# 📝 FastAPI TODO App - MongoDB Atlas + MongoEngine
+# 📝 FastAPI Student Mangement System - MongoDB Atlas + MongoEngine
 # ======================================================================================
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from mongoengine import connect, Document, IntField, StringField, FloatField
 
@@ -25,11 +25,7 @@ mongodb+srv://username:password@clustername.xxxxx.mongodb.net/todo_db?retryWrite
 └───────────────────────────────────────────────────────────────── MongoDB protocol
 '''
 connect(host=MONGO_URL)
-'''
-engine=create_engine(MONGO_URL)
-Sessionlocal=sessionmaker(bind=engine)
-Base=declarative_base()
-'''
+
 # ------------------------------------------------------------
 # 🧱 MongoDB Model (Like SQLAlchemy Model)
 # ------------------------------------------------------------
@@ -104,7 +100,6 @@ def display_all_std():
     
     return {"count":len(data),"data":data}
 
-
 # ------------------------------------------------------------
 # ✅ 3. READ SINGLE Student Data
 # ------------------------------------------------------------
@@ -124,7 +119,7 @@ def std_by_id(S_id:int):
     }
 
 # ------------------------------------------------------------
-# ✅ 4. UPDATE TODO
+# ✅ 4. UPDATE Student data
 # ------------------------------------------------------------
 @app.put("/Students/{S_id}")
 def update_stu(S_id:int,updated:std):
