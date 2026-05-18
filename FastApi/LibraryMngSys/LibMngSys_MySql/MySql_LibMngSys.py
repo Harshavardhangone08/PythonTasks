@@ -48,8 +48,9 @@ class lib(BaseModel):
     author:str
     price: float
     available:bool
-    class config:
-        orm_model = True 
+
+    class Config:
+        orm_mode = True 
 
 # ------------------------------------------------------------
 # 🔌 Dependency (DB Session)
