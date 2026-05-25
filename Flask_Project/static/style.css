@@ -1,0 +1,227 @@
+/*
+body{
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 40px;
+}
+
+.container{
+    width: 400px;
+    margin: auto;
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px lightgray;
+}
+
+h1{
+    text-align: center;
+    color: #333;
+}
+
+form{
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+input{
+    flex: 1;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+button{
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+}
+
+.add-btn{
+    background-color: blue;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.home-btn{
+    background-color: rgb(174, 6, 6);
+    width: 100%;
+    margin-top: 20px;
+}
+
+form button{
+    background-color: green;
+}
+
+ul{
+    list-style: none;
+    padding: 0;
+}
+
+li{
+    background-color: #eeeeee;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+    */
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fb;
+}
+
+/* Main Container */
+
+.todo-container{
+    width: 800px;
+    margin: 50px auto;
+}
+
+/* Header */
+
+.top-bar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.top-bar h1{
+    margin: 0;
+    color: #222;
+    font-size: 32px;
+}
+
+.top-bar p{
+    margin-top: 5px;
+    color: gray;
+}
+
+/* Buttons */
+
+button{
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.home-btn{
+    background-color: #6c757d;
+}
+
+.add-btn{
+    background-color: #007bff;
+}
+
+.update-btn{
+    background-color: #ffc107;
+    color: black;
+}
+
+.save-btn{
+    background-color: #28a745;
+}
+
+.delete-btn{
+    background-color: #dc3545;
+}
+
+.cancel-btn{
+    background-color: gray;
+}
+
+.confirm-delete-btn{
+    background-color: #dc3545;
+}
+
+/* Add Form */
+
+.todo-form{
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.todo-form input{
+    flex: 1;
+    padding: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+/* Todo Card */
+
+.todo-card{
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    box-shadow: 0px 3px 12px rgba(0,0,0,0.08);
+}
+
+.task-section{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-input{
+    width: 60%;
+    border: none;
+    background: transparent;
+    font-size: 17px;
+    color: #333;
+    outline: none;
+}
+
+.task-input[readonly]{
+    cursor: default;
+}
+
+.action-buttons{
+    display: flex;
+    gap: 10px;
+}
+
+/* Modal */
+
+.modal{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content{
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 350px;
+    text-align: center;
+}
+
+.modal-content h2{
+    margin-top: 0;
+}
+
+.modal-buttons{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}

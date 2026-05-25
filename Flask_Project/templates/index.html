@@ -1,0 +1,59 @@
+
+<!--
+<html>
+<head>
+    <title>Todo App</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Todo List</h1>
+        <a href="/add">
+            <button class="add-btn">
+                Add New Todo
+            </button>
+        </a>
+        <ul>
+            {% for todo in todos %}
+                <li>
+                    {{ todo.id }}. {{ todo.task }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Todo Application</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="home-container">
+
+        <h1>Welcome To Todo Application</h1>
+
+        <p>
+            Organize tasks easily and efficiently.
+        </p>
+
+        <a href="/todos">
+            <button class="main-btn">
+                View Todos
+            </button>
+        </a>
+
+    </div>
+
+</body>
+</html>
+
