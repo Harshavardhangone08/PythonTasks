@@ -1,0 +1,43 @@
+<!-- Tab 2: BOOKS CATALOG VIEW -->
+<div id="tab-books" class="tab-content space-y-6">
+  <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <span class="text-xs tracking-wider text-slate-400 font-mono">Genre filter:</span>
+      <select id="book-genre-filter" onchange="renderBooksTable()" class="bg-[#101014] border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-300">
+        <option value="ALL">All genres</option>
+        <option value="Sci-Fi">Sci-Fi</option>
+        <option value="Dystopian">Dystopian</option>
+        <option value="Fiction">Fiction</option>
+        <option value="Classic">Classic</option>
+        <option value="Cyberpunk">Cyberpunk</option>
+        <option value="Fantasy">Fantasy</option>
+      </select>
+    </div>
+
+    <button onclick="openAddBookModal()" class="px-5 py-2.5 bg-[#c4a47c] hover:bg-[#b08e62] text-black font-semibold rounded-xl transition-all flex items-center gap-2 text-xs cursor-pointer">
+      <i data-lucide="plus" class="h-4 w-4"></i>
+      Add new title
+    </button>
+  </div>
+
+  <!-- Books Table -->
+  <div class="glass-panel rounded-2xl overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-white/10 bg-black/40 text-[10px] font-mono tracking-widest text-[#c4a47c]">
+            <th class="py-4.5 px-6">ID & book title</th>
+            <th class="py-4.5 px-6">Author specification</th>
+            <th class="py-4.5 px-6">Genre classification</th>
+            <th class="py-4.5 px-6 text-right">Unit price</th>
+            <th class="py-4.5 px-6 text-center">Available stock</th>
+            <th class="py-4.5 px-6 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5 text-xs text-slate-200" id="books-table-body">
+          <!-- Rendered Dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+<!-- 🔒 OPERATOR REGISTRATION & SECURED LOGIN BARRIER -->
+<div id="login-screen-v2" class="fixed inset-0 bg-black/75 backdrop-blur-xl z-[100] flex items-center justify-center p-4 transition-all duration-500">
+  <!-- Glowing subtle backplates for atmospheric immersion -->
+  <div class="absolute top-1/4 left-1/3 w-72 h-72 bg-[#c4a47c]/5 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
+  <div class="absolute bottom-1/4 right-1/3 w-80 h-80 bg-amber-500/5 rounded-full blur-[140px] pointer-events-none duration-[8000ms] animate-pulse"></div>
+
+  <div class="w-full max-w-[360px] bg-gradient-to-b from-[#111116]/95 to-[#0b0b0e]/98 border border-[#c4a47c]/25 rounded-[2rem] p-7 space-y-6 shadow-[0_0_50px_rgba(196,164,124,0.08)] relative overflow-hidden transition-all duration-300 hover:border-[#c4a47c]/45">
+    <!-- Intricate premium golden-lens flares inside the card -->
+    <div class="absolute -top-32 -left-32 h-64 w-64 bg-[#c4a47c]/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-32 -right-32 h-64 w-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+    <!-- Luxury Vault Lock / Brand Header -->
+    <div class="text-center space-y-3 relative z-10">
+      <!-- Elegant Interactive Spinning Ring Shield -->
+      <div class="relative w-16 h-16 mx-auto flex items-center justify-center">
+        <!-- spinning luxury golden outer ring -->
+        <div class="absolute inset-0 rounded-full border border-[#c4a47c]/20 border-t-[#c4a47c] animate-spin" style="animation-duration: 3s;"></div>
+        <!-- glowing inner circular hub -->
+        <div class="w-12 h-12 bg-gradient-to-br from-[#1b1b22] to-[#111115] text-[#c4a47c] rounded-full flex items-center justify-center border border-[#c4a47c]/30 shadow-inner">
+          <i data-lucide="key-round" class="h-5.5 w-5.5 text-amber-400"></i>
+        </div>
+      </div>
+      <div>
+        <h2 class="font-serif-lux text-2xl font-semibold tracking-wider text-white">Libris <span class="text-[#c4a47c]">Vault</span></h2>
+        <p class="text-[9px] text-slate-400 tracking-widest font-mono uppercase mt-1">Authorized operation keyhole</p>
+      </div>
+    </div>
+
+    <!-- Dynamic Toast Alert Alert Banner -->
+    <div id="login-error-banner" class="hidden bg-rose-500/10 border border-rose-500/25 p-3 rounded-xl text-rose-400 text-xs font-mono flex items-center gap-2 relative z-10">
+      <i data-lucide="alert-circle" class="h-4 w-4 shrink-0"></i>
+      <span id="login-error-text">Authenticating credentials failed.</span>
+    </div>
+
+    <!-- Premium Autocomplete Access Form -->
+    <form id="secured-login-form" onsubmit="handleSessionSubmit(event)" class="space-y-4.5 relative z-10">
+      
+      <!-- Input 1: Operator Username Field -->
+      <div class="space-y-1.5 relative">
+        <label class="text-[9px] text-slate-400 tracking-widest font-mono uppercase flex items-center justify-between">
+          <span>Operator username</span>
+          <span class="text-[#c4a47c]/60 font-semibold flex items-center gap-1">
+            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+            secured
+          </span>
+        </label>
+        <div class="relative group">
+          <input type="text" id="login-username" autocomplete="off" required placeholder="Type username..." oninput="handleUsernameAutocomplete(this.value)" class="w-full bg-[#121216]/90 border border-white/10 group-hover:border-white/20 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-[#c4a47c] focus:ring-1 focus:ring-[#c4a47c]/30 outline-none transition-all duration-300">
+          <span class="absolute left-3 top-3 text-slate-500 group-hover:text-amber-400 transition-colors duration-300">
+            <i data-lucide="user-cog" class="h-4 w-4"></i>
+          </span>
+        </div>
+
+        <!-- Pop-out Search Auto-Autocomplete Dropdown Panel -->
+        <div id="autocomplete-suggestions" class="absolute left-0 right-0 mt-1.5 bg-[#14141a] border border-[#c4a47c]/30 rounded-xl shadow-2xl hidden z-50 overflow-hidden divide-y divide-white/5 max-h-[160px] overflow-y-auto">
+          <!-- Dynamic suggestion rows go here -->
+        </div>
+      </div>
+
+      <!-- Input 2: Authenticator PIN / Password Block -->
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between">
+          <label class="text-[9px] text-slate-400 tracking-widest font-mono uppercase">Librarian Access code</label>
+        </div>
+        <div class="relative group">
+          <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-[#121216]/90 border border-white/10 group-hover:border-white/20 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder-slate-600 focus:border-[#c4a47c] focus:ring-1 focus:ring-[#c4a47c]/30 outline-none transition-all duration-300">
+          <span class="absolute left-3 top-3 text-slate-500 group-hover:text-amber-400 transition-colors duration-300">
+            <i data-lucide="lock" class="h-4 w-4"></i>
+          </span>
+        </div>
+      </div>
+
+      <!-- Shiny luxury golden submit action button -->
+      <button type="submit" class="w-full py-3 mt-6 bg-gradient-to-r from-[#c4a47c] to-[#e4c49c] hover:from-[#e4c49c] hover:to-[#c4a47c] text-neutral-950 font-bold rounded-xl text-xs tracking-widest transition-all duration-300 transform active:scale-95 cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-[#c4a47c]/15">
+        <i data-lucide="shield-check" class="h-4.5 w-4.5"></i>
+        AUTHENTICATE AND ENTER
+      </button>
+    </form>
+
+    <!-- Bottom encryption note & system info -->
+    <div class="text-center pt-2 border-t border-white/5 flex items-center justify-center gap-1.5">
+      <i data-lucide="unlocked" class="h-3 w-3 text-emerald-400/80"></i>
+      <span class="text-[8px] text-slate-500 font-mono tracking-widest">AES-256 SESSION KEYRING SYSTEM</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Libris — Library Management System</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Custom CSS overrides from static/style.css -->
+  <link rel="stylesheet" href="/static/style.css">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    // Tailwind Config for custom luxury styling
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: {
+              DEFAULT: '#c4a47c',
+              hover: '#b08e62',
+              light: '#f7f4ef',
+              dark: '#1c1813'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="ambient-bg lg:h-screen lg:overflow-hidden text-[#f1f5f9] font-sans">
+
+  <!-- ==========================================
+       🔒 OPERATOR REGISTRATION & SECURED LOGIN BARRIER
+       ========================================== -->
+  {% include 'login.html' %}
+
+  <!-- ==========================================
+       🔔 TOP BANNER / AMBIENT GLOW DECORATOR
+       ========================================== -->
+  <div class="h-1 bg-gradient-to-r from-amber-500/10 via-[#c4a47c]/60 to-slate-900"></div>
+
+  <!-- Primary Outer Grid Container -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 h-screen overflow-hidden lg:overflow-visible">
+
+    <!-- ==========================================
+         🦁 SIDEBAR NAVIGATION PANEL
+         ========================================== -->
+    <aside class="lg:col-span-3 xl:col-span-2 bg-[#0c0c10]/95 border-r border-[#c4a47c]/5 flex flex-col justify-between py-6 px-5 relative z-10 lg:h-full lg:overflow-y-auto shrink-0">
+      
+      <!-- Brand Frame -->
+      <div class="space-y-8">
+        <div class="flex items-center gap-3.5 px-2">
+          <div class="p-2 bg-[#c4a47c]/10 text-[#c4a47c] rounded-xl border border-[#c4a47c]/15">
+            <i data-lucide="book-marked" class="h-6 w-6"></i>
+          </div>
+          <div>
+            <h1 class="font-serif-lux text-lg font-bold tracking-widest text-[#c4a47c] uppercase">LIBRIS</h1>
+            <p class="text-[9px] text-[#c4a47c]/40 uppercase tracking-widest font-mono">System Core v2.4</p>
+          </div>
+        </div>
+
+        <!-- Visual Time Stamp Header -->
+        <div class="bg-[#121216]/60 rounded-xl p-3 border border-white/5 space-y-1">
+          <div class="text-[9px] tracking-wider text-slate-400 font-mono flex items-center gap-1.5">
+            <i data-lucide="clock" class="h-3 w-3 text-amber-500"></i>
+            Current System Time
+          </div>
+          <div id="utc-clock" class="text-xs font-mono font-bold text-[#c4a47c]">Loading UTC...</div>
+        </div>
+
+        <!-- Navigation Menu Link Buttons -->
+        <nav class="space-y-1.5" id="sidebar-nav">
+          <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn active w-full flex items-center gap-3.5 px-4 py-3 text-left transition-all rounded-xl cursor-pointer">
+            <i data-lucide="layout-dashboard" class="h-4.5 w-4.5"></i>
+            <span class="text-xm font-semibold whitespace-nowrap">Dashboard</span>
+          </button>
+
+          <button onclick="switchTab('books')" id="btn-books" class="nav-btn w-full flex items-center gap-3.5 px-4 py-3 text-left transition-all rounded-xl cursor-pointer text-slate-400 hover:text-white hover:bg-white/5">
+            <i data-lucide="book" class="h-4.5 w-4.5"></i>
+            <span class="text-xm font-semibold whitespace-nowrap">Books Catalog</span>
+          </button>
+
+          <button onclick="switchTab('users')" id="btn-users" class="nav-btn w-full flex items-center gap-3.5 px-4 py-3 text-left transition-all rounded-xl cursor-pointer text-slate-400 hover:text-white hover:bg-white/5">
+            <i data-lucide="users" class="h-4.5 w-4.5"></i>
+            <span class="text-xm font-semibold whitespace-nowrap">Reader Directory</span>
+          </button>
+
+          <button onclick="switchTab('issue')" id="btn-issue" class="nav-btn w-full flex items-center gap-3.5 px-4 py-3 text-left transition-all rounded-xl cursor-pointer text-slate-400 hover:text-white hover:bg-white/5">
+            <i data-lucide="arrow-left-right" class="h-4.5 w-4.5"></i>
+            <span class="text-xm font-semibold whitespace-nowrap">Issue Counter</span>
+          </button>
+
+          <button onclick="switchTab('history')" id="btn-history" class="nav-btn w-full flex items-center gap-3.5 px-4 py-3 text-left transition-all rounded-xl cursor-pointer text-slate-400 hover:text-white hover:bg-white/5">
+            <i data-lucide="history" class="h-4.5 w-4.5"></i>
+            <span class="text-xm font-semibold whitespace-nowrap">Ledger/History</span>
+          </button>
+
+        </nav>
+      </div>
+
+      <!-- Operator Settings and Dynamic Action Buttons -->
+      <div class="pt-4 border-t border-white/5 flex flex-col gap-2 relative">
+        <div onclick="toggleOperatorMenu()" class="flex items-center justify-between gap-2 px-2 py-1.5 hover:bg-white/5 rounded-xl cursor-pointer transition-all border border-transparent hover:border-white/5" title="Operator Actions">
+          <div class="min-w-0">
+            <div class="text-[9px] text-slate-500 font-mono tracking-wider uppercase">Active operator</div>
+            <div class="text-xs text-[#c4a47c] mt-0.5 truncate font-semibold" id="operator-badge">harsha08</div>
+          </div>
+          <div class="p-1 text-slate-400">
+            <i data-lucide="chevron-up" class="h-3.5 w-3.5"></i>
+          </div>
+        </div>
+
+        <!-- Toggle Operator Actions Overlay Menu -->
+        <div id="operator-dropdown-actions" class="hidden bg-[#121216]/95 border border-white/10 rounded-xl p-1.5 space-y-1">
+          <button onclick="handleSwitchAccount()" class="w-full flex items-center gap-2 px-2.5 py-1.5 hover:bg-[#c4a47c]/10 text-[11px] text-slate-300 hover:text-[#c4a47c] transition-all rounded-lg text-left cursor-pointer font-medium">
+            <i data-lucide="users-round" class="h-3.5 w-3.5 text-[#c4a47c]"></i>
+            Switch account
+          </button>
+          <button onclick="handleSignOut()" class="w-full flex items-center gap-2 px-2.5 py-1.5 hover:bg-rose-500/10 text-[11px] text-rose-400 hover:text-rose-300 transition-all rounded-lg text-left cursor-pointer font-medium">
+            <i data-lucide="log-out" class="h-3.5 w-3.5"></i>
+            Sign out
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ==========================================
+         🖥️ MAIN INTERACTIVE CLIENT AREA
+         ========================================== -->
+    <main class="lg:col-span-9 xl:col-span-10 p-6 lg:p-8 flex flex-col gap-6 overflow-y-auto">
+      
+      <!-- Top header status row -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/5">
+        <div>
+          <h2 class="text-2xl font-serif-lux font-bold tracking-wide" id="page-title-display">Library Dashboard</h2>
+          <p class="text-xs text-slate-400 mt-1" id="page-subtitle-display">Real-time active SQL schema syncing database controller module.</p>
+        </div>
+        
+        <div class="flex items-center gap-2.5">
+          <input type="text" id="global-search-bar" onkeyup="handleGlobalSearch()" placeholder="Search catalog title..." class="bg-[#101014] border border-white/10 rounded-xl px-4 py-2.5 text-xs w-52 focus:w-64">
+          <button onclick="resetApplicationState()" class="p-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 rounded-xl transition-all cursor-pointer font-bold flex items-center gap-2 text-xs" title="Reset databases to original fallback metrics">
+            <i data-lucide="rotate-ccw" class="h-4 w-4"></i>
+            Reset database
+          </button>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           TAB CONTENTS Area
+           ========================================== -->
+
+      <!-- Tab 1: DASHBOARD VIEW -->
+      {% include 'dashboard.html' %}
+
+      <!-- Tab 2: BOOKS CATALOG VIEW -->
+      {% include 'books.html' %}
+
+      <!-- Tab 3: REGISTERED READERS DIRECTORY VIEW -->
+      {% include 'users.html' %}
+
+      <!-- Tab 4: CIRCULATION SERVICE COUNTER (ISSUE BOOK FORM) -->
+      {% include 'circulation.html' %}
+
+      <!-- Tab 5: LOAN TRANSACTIONS LEDGER & RETURNS VIEW -->
+      {% include 'loans.html' %}
+
+
+
+    </main>
+  </div>
+
+  <!-- ==========================================
+       🛡️ ADD / EDIT BOOK DETAILS MODAL POPUP
+       ========================================== -->
+  {% include 'modal_book.html' %}
+
+
+  <!-- ======================================================================================
+       ⚙️ CLIENT SIDE DATA ENGINE & ROUTE CODES
+       ====================================================================================== -->
+  <script>
+    // Global States setup with clean default fallback metrics
+    const initialBooks = [
+      { id: 1, title: "Dune", author: "Frank Herbert", genre: "Sci-Fi", price: 599.00, total_quantity: 5, available_quantity: 4 },
+      { id: 2, title: "1984", author: "George Orwell", genre: "Dystopian", price: 399.00, total_quantity: 3, available_quantity: 3 },
+      { id: 3, title: "To Kill a Mockingbird", author: "Harper Lee", genre: "Fiction", price: 450.00, total_quantity: 4, available_quantity: 4 },
+      { id: 4, title: "The Great Gatsby", author: "F. Scott Fitzgerald", genre: "Classic", price: 350.00, total_quantity: 2, available_quantity: 1 },
+      { id: 5, title: "Neuromancer", author: "William Gibson", genre: "Cyberpunk", price: 499.00, total_quantity: 3, available_quantity: 3 },
+      { id: 6, title: "The Hobbit", author: "J.R.R. Tolkien", genre: "Fantasy", price: 550.00, total_quantity: 6, available_quantity: 6 }
+    ];
+
+    const initialUsers = [
+      { id: 1, name: "Harsha Vardhan", email: "harshagenius0@gmail.com" },
+      { id: 2, name: "Jane Smith", email: "janesmith@example.com" },
+      { id: 3, name: "Alan Turing", email: "alan.turing@example.com" }
+    ];
+
+    const initialHistory = [
+      {
+        id: 1,
+        book_id: 1,
+        user_id: 1,
+        issued_by: "Admin",
+        issued_to: "Harsha Vardhan",
+        issued_time: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        due_date: new Date(Date.now() + 9 * 24 * 60 * 60 * 1000).toISOString(), // 14 days total, not overdue
+        returned_time: null,
+        fine_amount: 0,
+        status: "Issued"
+      },
+      {
+        id: 2,
+        book_id: 4,
+        user_id: 2,
+        issued_by: "Librarian",
+        issued_to: "Jane Smith",
+        issued_time: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
+        due_date: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(), // overdue by 6 days
+        returned_time: null,
+        fine_amount: 60, // calculated fine: 6 days * 10
+        status: "Issued"
+      }
+    ];
+
+    const initialLogs = [
+      { id: 1, text: "Database cluster initialized securely in SQLite3 standard library.", time: new Date(Date.now() - 600000).toISOString(), type: "system" },
+      { id: 2, text: "Admin completed user registration for Harsha Vardhan.", time: new Date(Date.now() - 300000).toISOString(), type: "user" },
+      { id: 3, text: "Issued core textbook Dune to reader successfully.", time: new Date(Date.now() - 50000).toISOString(), type: "circulation" }
+    ];
+
+    // Read and Write functions
+    function loadState(key, defaults) {
+      if(!localStorage.getItem(key)) {
+        localStorage.setItem(key, JSON.stringify(defaults));
+      }
+      return JSON.parse(localStorage.getItem(key));
+    }
+
+    function saveState(key, data) {
+      localStorage.setItem(key, JSON.stringify(data));
+      updateDashboardUI();
+    }
+
+    // Stateful objects
+    let state = {
+      books: loadState('libris_books', initialBooks),
+      users: loadState('libris_users', initialUsers),
+      history: loadState('libris_history', initialHistory),
+      logs: loadState('libris_logs', initialLogs),
+      activeFile: 'fastapi'
+    };
+
+    // Real-Time UTC Tick timer
+    function updateClock() {
+      const clockEl = document.getElementById("utc-clock");
+      const secureDate = new Date();
+      clockEl.innerText = secureDate.toUTCString().replace("GMT", "UTC");
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Reset layout storage
+    function resetApplicationState() {
+      if (confirm("Verify Database Flush: Do you want to reset all titles, active transactions, and customer profile registries?")) {
+        localStorage.removeItem('libris_books');
+        localStorage.removeItem('libris_users');
+        localStorage.removeItem('libris_history');
+        localStorage.removeItem('libris_logs');
+        
+        state.books = JSON.parse(JSON.stringify(initialBooks));
+        state.users = JSON.parse(JSON.stringify(initialUsers));
+        state.history = JSON.parse(JSON.stringify(initialHistory));
+        state.logs = [
+          { id: Date.now(), text: "Database systems hard-flushed and restored to factory specifications.", time: new Date().toISOString(), type: "system" }
+        ];
+
+        saveState('libris_books', state.books);
+        saveState('libris_users', state.users);
+        saveState('libris_history', state.history);
+        saveState('libris_logs', state.logs);
+        
+        addLog("Database schema restored gracefully.", "system");
+        
+        renderBooksTable();
+        renderUsersTable();
+        renderHistoryTable();
+        updateDashboardUI();
+        alert("SQL Relational Database reset complete!");
+      }
+    }
+
+    // Logger operations
+    function addLog(text, type = "system") {
+      state.logs.unshift({
+        id: Date.now(),
+        text: text,
+        time: new Date().toISOString(),
+        type: type
+      });
+      // limit logged items size
+      if(state.logs.length > 20) state.logs.pop();
+      saveState('libris_logs', state.logs);
+      renderLogs();
+    }
+
+    function renderLogs() {
+      const container = document.getElementById("logs-container");
+      container.innerHTML = "";
+      state.logs.forEach(log => {
+        const timeStr = new Date(log.time).toLocaleTimeString();
+        let colorClasses = "text-slate-400";
+        let icon = "info";
+
+        if(log.type === "system") {
+          colorClasses = "text-amber-400";
+          icon = "cpu";
+        } else if(log.type === "circulation") {
+          colorClasses = "text-emerald-400";
+          icon = "arrow-left-right";
+        } else if(log.type === "user") {
+          colorClasses = "text-sky-400";
+          icon = "user";
+        }
+
+        container.innerHTML += `
+          <div class="flex gap-4 items-start text-xs font-mono pr-4 relative pl-7 group">
+            <span class="absolute left-[8px] top-1 h-2 w-2 rounded-full border border-[#c4a47c]/40 bg-zinc-950 z-15 group-hover:bg-[#c4a47c] transition-all"></span>
+            <div class="space-y-0.5">
+              <div class="flex items-center gap-2">
+                <span class="text-[9px] text-[#c4a47c]/60 font-mono">${timeStr}</span>
+                <span class="text-[9px] uppercase tracking-wider font-bold ${colorClasses}">${log.type}</span>
+              </div>
+              <p class="text-slate-300 leading-normal">${log.text}</p>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Switch screens
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('#sidebar-nav .nav-btn').forEach(btn => {
+        btn.className = "nav-btn w-full flex items-center gap-3.5 px-4 py-3 text-left transition-all rounded-xl cursor-pointer text-slate-400 hover:text-white hover:bg-white/5";
+      });
+
+      const targetTab = document.getElementById("tab-" + tabId);
+      if (targetTab) {
+        targetTab.classList.add('active');
+        const activeBtn = document.getElementById("btn-" + tabId);
+        if (activeBtn) {
+          activeBtn.className = "nav-btn active w-full flex items-center gap-3.5 px-4 py-3 text-left transition-all rounded-xl cursor-pointer bg-[#c4a47c]/10 text-[#c4a47c] border-r-2 border-[#c4a47c] font-semibold";
+        }
+      }
+
+      // Title/Description configurations
+      const displayTitle = document.getElementById("page-title-display");
+      const displaySubtitle = document.getElementById("page-subtitle-display");
+
+      switch(tabId) {
+        case 'dashboard':
+          displayTitle.innerText = "Library Dashboard";
+          displaySubtitle.innerText = "Real-time active SQL schema syncing database controller module.";
+          break;
+        case 'books':
+          displayTitle.innerText = "Books Repository catalog";
+          displaySubtitle.innerText = "Review, register, modify, or eliminate physical book inventory catalog units.";
+          break;
+        case 'users':
+          displayTitle.innerText = "Registered Readers Directory";
+          displaySubtitle.innerText = "Browse list of library patrons or add new customer registries.";
+          break;
+        case 'issue':
+          displayTitle.innerText = "Circulation Desk Counter";
+          displaySubtitle.innerText = "Lend academic volumes and record dates into standard SQL schemas.";
+          break;
+        case 'history':
+          displayTitle.innerText = "Loan Ledger & Returns Transaction Logs";
+          displaySubtitle.innerText = "Record returns activity, inspect pending fines, and verify timeline milestones.";
+          break;
+        case 'python':
+          displayTitle.innerText = "Python API Hub & Codespace";
+          displaySubtitle.innerText = "View Flask & FastAPI identical layout configurations, backend models, and schemas.";
+          togglePythonFile(state.activeFile);
+          break;
+      }
+
+      // Perform updates
+      renderBooksTable();
+      renderUsersTable();
+      renderHistoryTable();
+      populateIssueDropdowns();
+      updateDashboardUI();
+    }
+
+    // Sync metrics counters
+    function updateDashboardUI() {
+      const totalTitles = state.books.length;
+      const inStock = state.books.reduce((acc, book) => acc + book.available_quantity, 0);
+      const activeLoans = state.history.filter(h => h.status === 'Issued').length;
+      
+      const unresolvedFines = state.history.reduce((acc, h) => {
+        if (h.status === 'Issued') {
+          // Calculate dynamic fine on visual render
+          const due = new Date(h.due_date);
+          const now = new Date();
+          if (now > due) {
+            const diffMs = now - due;
+            const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+            return acc + (days * 10);
+          }
+        } else if (h.status === 'Late Return') {
+          return acc + h.fine_amount;
+        }
+        return acc;
+      }, 0);
+
+      document.getElementById("metric-total-books").innerText = totalTitles;
+      document.getElementById("metric-stock-books").innerText = inStock;
+      document.getElementById("metric-issued-books").innerText = activeLoans;
+      document.getElementById("metric-fees").innerText = "₹" + unresolvedFines;
+
+      // Render mini readers directory
+      const miniList = document.getElementById("mini-readers-list");
+      miniList.innerHTML = "";
+      state.users.slice(0, 3).forEach(reader => {
+        miniList.innerHTML += `
+          <div class="flex items-center justify-between py-3">
+            <div class="flex items-center gap-3">
+              <div class="p-1.5 rounded bg-white/5 border border-white/5 text-[#c4a47c] text-xs font-mono font-bold">
+                U-${reader.id}
+              </div>
+              <div class="flex flex-col">
+                <span class="text-xs font-semibold text-white">${reader.name}</span>
+                <span class="text-[10px] text-slate-500 font-mono">${reader.email}</span>
+              </div>
+            </div>
+            <i data-lucide="chevron-right" class="h-3.5 w-3.5 text-slate-600"></i>
+          </div>
+        `;
+      });
+      lucide.createIcons();
+    }
+
+    // Global filters & Search
+    function handleGlobalSearch() {
+      const q = (document.getElementById("global-search-bar").value || "").trim().toLowerCase();
+      // Auto-switch to books tab if not already active to show immediate response
+      const booksTab = document.getElementById("tab-books");
+      if (booksTab && !booksTab.classList.contains("active")) {
+        switchTab("books");
+      } else {
+        renderBooksTable();
+      }
+    }
+
+    // Books rendering
+    function renderBooksTable() {
+      const tbody = document.getElementById("books-table-body");
+      if(!tbody) return;
+      tbody.innerHTML = "";
+
+      const qBar = document.getElementById("global-search-bar");
+      const query = qBar ? (qBar.value || "").trim().toLowerCase() : "";
+
+      const genreFilter = document.getElementById("book-genre-filter").value;
+      
+      const filtered = state.books.filter(book => {
+        const matchesQuery = book.title.toLowerCase().includes(query) || book.author.toLowerCase().includes(query);
+        const matchesGenre = genreFilter === "ALL" || book.genre === genreFilter;
+        return matchesQuery && matchesGenre;
+      });
+
+      if(filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-500 font-mono">No book titles matched criteria.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach(book => {
+        tbody.innerHTML += `
+          <tr class="hover:bg-white/5 transition-all">
+            <td class="py-4.5 px-6 font-medium">
+              <div class="flex items-center gap-3">
+                <span class="text-[10px] font-mono text-slate-500 bg-white/5 px-2 py-0.5 rounded border border-white/5">B-${book.id}</span>
+                <span class="text-white text-xs font-serif-lux font-bold">${book.title}</span>
+              </div>
+            </td>
+            <td class="py-4.5 px-6 text-slate-300 font-mono text-xs">${book.author}</td>
+            <td class="py-4.5 px-6">
+              <span class="text-[10px] bg-slate-500/10 text-slate-300 rounded-full px-2.5 py-1 border border-white/5 tracking-wider font-mono">${book.genre}</span>
+            </td>
+            <td class="py-4.5 px-6 text-right font-mono font-semibold text-[#c4a47c]">₹${book.price.toFixed(2)}</td>
+            <td class="py-4.5 px-6 text-center">
+              <div class="flex flex-col gap-0.5">
+                <div class="text-xs text-white font-mono font-bold">${book.available_quantity} <span class="text-slate-500 text-[10px]/none font-normal">of ${book.total_quantity}</span></div>
+                <div class="w-20 bg-white/10 h-1.5 rounded-full overflow-hidden mx-auto mt-1">
+                  <div class="bg-amber-500 h-full" style="width: ${(book.available_quantity / book.total_quantity) * 100}%"></div>
+                </div>
+              </div>
+            </td>
+            <td class="py-4.5 px-6 text-right">
+              <div class="flex items-center justify-end gap-2">
+                <button onclick="openEditBookModal(${book.id})" class="p-2 hover:bg-white/5 text-[#c4a47c] rounded-lg transition-all cursor-pointer" title="Adjust details">
+                  <i data-lucide="edit-3" class="h-4 w-4"></i>
+                </button>
+                <button onclick="handleDeleteBook(${book.id})" class="p-2 hover:bg-rose-500/10 text-rose-400 rounded-lg transition-all cursor-pointer" title="Purge item">
+                  <i data-lucide="trash-2" class="h-4 w-4"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+      lucide.createIcons();
+    }
+
+    // Modal forms controls
+    function openAddBookModal() {
+      document.getElementById("book-modal-title").innerText = "Register New Catalogs Unit";
+      document.getElementById("book-id-input").value = "";
+      document.getElementById("book-title-input").value = "";
+      document.getElementById("book-author-input").value = "";
+      document.getElementById("book-genre-input").value = "Sci-Fi";
+      document.getElementById("book-price-input").value = "";
+      document.getElementById("book-qty-input").value = "";
+      
+      const modal = document.getElementById("book-modal-container");
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function openEditBookModal(bookId) {
+      const book = state.books.find(b => b.id === bookId);
+      if(!book) return;
+
+      document.getElementById("book-modal-title").innerText = "Adjust Catalog Record (B-" + book.id + ")";
+      document.getElementById("book-id-input").value = book.id;
+      document.getElementById("book-title-input").value = book.title;
+      document.getElementById("book-author-input").value = book.author;
+      document.getElementById("book-genre-input").value = book.genre;
+      document.getElementById("book-price-input").value = book.price;
+      document.getElementById("book-qty-input").value = book.total_quantity;
+
+      const modal = document.getElementById("book-modal-container");
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeBookModal() {
+      const modal = document.getElementById("book-modal-container");
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
+    }
+
+    async function handleBookFormSubmit(e) {
+      e.preventDefault();
+      const idVal = document.getElementById("book-id-input").value;
+      const title = document.getElementById("book-title-input").value.trim();
+      const author = document.getElementById("book-author-input").value.trim();
+      const genre = document.getElementById("book-genre-input").value;
+      const price = parseFloat(document.getElementById("book-price-input").value);
+      const total_qty = parseInt(document.getElementById("book-qty-input").value);
+
+      const payload = {
+        title: title,
+        author: author,
+        genre: genre,
+        price: price,
+        total_quantity: total_qty
+      };
+
+      try {
+        if(idVal) {
+          // Edit Mode
+          const bId = parseInt(idVal);
+          const response = await fetch(`/books/${bId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (response.ok) {
+            addLog(`Adjusted asset parameters of book '${title}' (ID: ${bId}) in MySQL.`, "system");
+          } else {
+            console.error("Failed to update book in MySQL.");
+          }
+        } else {
+          // Add Mode
+          const response = await fetch(`/books`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (response.ok) {
+            addLog(`Registered new book '${title}' in MySQL system.`, "system");
+          } else {
+            console.error("Failed to insert book in MySQL.");
+          }
+        }
+      } catch (err) {
+        console.error("Database sync failed, fell back to local", err);
+      }
+
+      closeBookModal();
+      await syncFromBackend();
+    }
+
+    async function handleDeleteBook(bookId) {
+      const title = state.books.find(b => b.id === bookId)?.title || "Unknown Book";
+      if(confirm(`Verify Delete: Purging title '${title}' (ID B-${bookId}) will destroy active records! Proceed?`)) {
+        try {
+          const response = await fetch(`/books/${bookId}`, {
+            method: 'DELETE'
+          });
+          if (response.ok) {
+            addLog(`Permanently eliminated asset register index ${bookId} (${title}) from MySQL.`, "system");
+          }
+        } catch (err) {
+          console.error("Database deletion failed", err);
+        }
+        await syncFromBackend();
+      }
+    }
+
+    // Users directory
+    function renderUsersTable() {
+      const tbody = document.getElementById("users-table-body");
+      if(!tbody) return;
+      tbody.innerHTML = "";
+
+      document.getElementById("user-count-badge").innerText = state.users.length + " Profiles";
+
+      if(state.users.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" class="text-center py-8 text-slate-500 font-mono">No customers profiles found.</td></tr>`;
+        return;
+      }
+
+      state.users.forEach(user => {
+        tbody.innerHTML += `
+          <tr class="hover:bg-white/5 transition-all">
+            <td class="py-4 px-6 font-medium">
+              <div class="flex items-center gap-3">
+                <span class="text-[10px] font-mono text-slate-500 bg-white/5 px-2 py-0.5 rounded border border-white/5">U-${user.id}</span>
+                <span class="text-white text-xs font-semibold">${user.name}</span>
+              </div>
+            </td>
+            <td class="py-4 px-6 text-slate-300 font-mono text-xs">${user.email}</td>
+            <td class="py-4 px-6 text-right">
+              <button onclick="handleDeleteUser(${user.id})" class="p-2 hover:bg-rose-500/10 text-rose-400 rounded-lg transition-all cursor-pointer" title="Purge user record">
+                <i data-lucide="trash-2" class="h-4 w-4"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+      lucide.createIcons();
+    }
+
+    async function handleAddUser(e) {
+      e.preventDefault();
+      const name = document.getElementById("user-name-input").value.trim();
+      const email = document.getElementById("user-email-input").value.trim();
+
+      try {
+        const response = await fetch(`/users`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email })
+        });
+        if (response.ok) {
+          const result = await response.json();
+          addLog(`Completed profile registration for reader '${name}' (U-${result?.data?.id || 'new'}) in MySQL.`, "user");
+          document.getElementById("user-name-input").value = "";
+          document.getElementById("user-email-input").value = "";
+          await syncFromBackend();
+        } else {
+          const errorData = await response.json();
+          alert(`Integrity Error: ${errorData.detail || "Unable to register reader."}`);
+        }
+      } catch (err) {
+        console.error("Could not register reader in MySQL", err);
+      }
+    }
+
+    async function handleDeleteUser(userId) {
+      const name = state.users.find(u => u.id === userId)?.name || "Unknown";
+      if(confirm(`Verify Delete: Purging reader profile '${name}' (ID U-${userId})? This removes loan authority!`)) {
+        try {
+          const response = await fetch(`/users/${userId}`, {
+            method: 'DELETE'
+          });
+          if (response.ok) {
+            addLog(`Eliminated profile credentials reader U-${userId} (${name}) from MySQL.`, "user");
+          } else {
+            const errorData = await response.json();
+            alert(`Purge error: ${errorData.detail || "Unable to purge reader."}`);
+          }
+        } catch (err) {
+          console.error("Could not purge reader", err);
+        }
+        await syncFromBackend();
+      }
+    }
+
+    // Circulation issue process
+    function populateIssueDropdowns() {
+      const uSelect = document.getElementById("issue-user-select");
+      const bSelect = document.getElementById("issue-book-select");
+
+      if(!uSelect || !bSelect) return;
+
+      uSelect.innerHTML = `<option value="">-- Choose Reader Account --</option>`;
+      state.users.forEach(u => {
+        uSelect.innerHTML += `<option value="${u.id}">${u.name} (U-${u.id}) - ${u.email}</option>`;
+      });
+
+      bSelect.innerHTML = `<option value="">-- Choose Available Book --</option>`;
+      state.books.forEach(b => {
+        const statusText = b.available_quantity > 0 ? `${b.available_quantity} available` : "OUT OF STOCK";
+        const disabledAttr = b.available_quantity > 0 ? "" : "disabled";
+        bSelect.innerHTML += `<option value="${b.id}" ${disabledAttr}>${b.title} (${b.author}) [${statusText}]</option>`;
+      });
+    }
+
+    async function handleIssueBook(e) {
+      e.preventDefault();
+      const userId = parseInt(document.getElementById("issue-user-select").value);
+      const bookId = parseInt(document.getElementById("issue-book-select").value);
+      const days = parseInt(document.getElementById("issue-days-input").value);
+      const operator = document.getElementById("issue-operator-input").value.trim() || "Admin";
+
+      const book = state.books.find(b => b.id === bookId);
+      const user = state.users.find(u => u.id === userId);
+
+      if(!book || book.available_quantity <= 0) {
+        alert("Stock Error: The target volume has no copies in inventory shelves.");
+        return;
+      }
+      if(!user) {
+        alert("Registry Error: Patron credentials invalid or missing.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`/issue-book/${bookId}/${userId}?days=${days}&issued_by=${encodeURIComponent(operator)}`, {
+          method: 'POST'
+        });
+        if (response.ok) {
+          addLog(`Lent item '${book.title}' (ID: ${bookId}) to ${user.name} for ${days} days. Op: ${operator} in MySQL.`, "circulation");
+          alert(`Success! File recorded. Book issued successfully to ${user.name}.`);
+          
+          // Clear forms and direct navigation
+          document.getElementById("issue-user-select").value = "";
+          document.getElementById("issue-book-select").value = "";
+          document.getElementById("issue-days-input").value = "14";
+          
+          switchTab("history");
+        } else {
+          const errorData = await response.json();
+          alert(`Issue Error: ${errorData.detail || "Unable to issue book."}`);
+        }
+      } catch (err) {
+        console.error("Could not register loan transaction in MySQL", err);
+      }
+      await syncFromBackend();
+    }
+
+    // Loans & ledger rendering
+    function renderHistoryTable() {
+      const tbody = document.getElementById("loans-table-body");
+      if(!tbody) return;
+      tbody.innerHTML = "";
+
+      const statusFilter = document.getElementById("loan-status-filter").value;
+
+      state.history.forEach(log => {
+        // Enforce dynamic overdue fines checking for display
+        let fine = log.fine_amount;
+        let isLateActive = false;
+        
+        if (log.status === "Issued") {
+          const due = new Date(log.due_date);
+          const now = new Date();
+          if (now > due) {
+            isLateActive = true;
+            const diffMs = now - due;
+            const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+            fine = days * 10;
+          }
+        }
+
+        const matchesFilter = statusFilter === "ALL" 
+          || (statusFilter === "Issued" && log.status === "Issued" && !isLateActive)
+          || (statusFilter === "Returned" && log.status === "Returned")
+          || (statusFilter === "Late Return" && (log.status === "Late Return" || isLateActive));
+
+        if (!matchesFilter) return;
+
+        const bookTitle = state.books.find(b => b.id === log.book_id)?.title || "Unknown Asset Header";
+        
+        let statusBadge = "";
+        if (log.status === "Returned") {
+          statusBadge = `<span class="px-2.5 py-1 text-[10px] rounded-full tracking-wider font-mono font-bold badge-returned">Returned</span>`;
+        } else if (isLateActive || log.status === "Late Return") {
+          statusBadge = `<span class="px-2.5 py-1 text-[10px] rounded-full tracking-wider font-mono font-bold badge-late">Overdue</span>`;
+        } else {
+          statusBadge = `<span class="px-2.5 py-1 text-[10px] rounded-full tracking-wider font-mono font-bold badge-issued">Lent active</span>`;
+        }
+
+        const buttonsHTML = log.status === "Issued" 
+          ? `<button onclick="handleReturnBook(${log.id})" class="px-3.5 py-1.5 bg-[#c4a47c]/15 hover:bg-[#c4a47c]/10 text-[#c4a47c] border border-[#c4a47c]/20 hover:border-[#c4a47c]/30 rounded-lg text-[10px] font-bold tracking-wider cursor-pointer transition-all flex items-center gap-1.5">
+               <i data-lucide="corner-down-left" class="h-3 w-3"></i> Return title
+             </button>`
+          : `<span class="text-slate-500 font-mono text-[10px]">Ledger locked</span>`;
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-white/5 transition-all">
+            <td class="py-4.5 px-6 font-medium">
+              <div class="flex items-center gap-2.5">
+                <span class="text-[10px] font-mono text-slate-500 bg-white/5 px-1.5 py-0.5 rounded">#T-${log.id}</span>
+                <div class="flex flex-col">
+                  <span class="text-white text-xs font-serif-lux font-bold">${bookTitle}</span>
+                  <span class="text-[10px] text-slate-400 mt-0.5">Assigned Asset ID: B-${log.book_id}</span>
+                </div>
+              </div>
+            </td>
+            <td class="py-4.5 px-6">
+              <div class="flex flex-col">
+                <span class="text-xs text-slate-200 font-semibold">${log.issued_to}</span>
+                <span class="text-[10px] text-slate-500 font-mono">Profile ID: U-${log.user_id}</span>
+              </div>
+            </td>
+            <td class="py-4.5 px-6 font-mono text-[10px] space-y-1">
+              <div>Lent: <span class="text-slate-400">${new Date(log.issued_time).toLocaleDateString()}</span></div>
+              <div>Due: <span class="text-[#c4a47c]">${new Date(log.due_date).toLocaleDateString()}</span></div>
+              ${log.returned_time ? `<div>Returned: <span class="text-emerald-400">${new Date(log.returned_time).toLocaleDateString()}</span></div>` : ''}
+            </td>
+            <td class="py-4.5 px-6">${statusBadge}</td>
+            <td class="py-4.5 px-6 text-right font-mono font-bold ${fine > 0 ? "text-rose-400" : "text-emerald-400"}">
+              ₹${fine.toFixed(2)}
+            </td>
+            <td class="py-4.5 px-6 text-right">${buttonsHTML}</td>
+          </tr>
+        `;
+      });
+
+      if (tbody.children.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-500 font-mono">No transactional logs listed for specified criteria.</td></tr>`;
+      }
+      lucide.createIcons();
+    }
+
+    async function handleReturnBook(loanId) {
+      const idx = state.history.findIndex(h => h.id === loanId);
+      if(idx === -1) return;
+
+      const log = state.history[idx];
+      const book = state.books.find(b => b.id === log.book_id);
+
+      if(!book) {
+        alert("Critical Error: Core inventory target could not be loaded.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`/return-book/${book.id}`, {
+          method: 'POST'
+        });
+        if (response.ok) {
+          const result = await response.json();
+          addLog(`Book return transaction complete for '${book.title}' in MySQL database. Fine penalty: ₹${result["fine amount"] || 0}`, "circulation");
+          alert(`Return recorded in MySQL! Book title '${book.title}' has returned to storage shelves successfully. Late fees collected: ₹${result["fine amount"] || 0}`);
+        } else {
+          alert("Return Error: Backend was unable to complete the return process.");
+        }
+      } catch (err) {
+        console.error("Could not register return in MySQL", err);
+      }
+      await syncFromBackend();
+    }
+
+
+    // ==========================================
+    // 🐍 CODE PREVIEW SANDBOX CODESPACES ENGINE
+    // ==========================================
+    const fastapiSourcePy = `# ======================================================================================
+# 📝 FastAPI Library Management System (CRUD) - SQL Database Version
+# ======================================================================================
+from fastapi import FastAPI, HTTPException, Depends
+from pydantic import BaseModel
+from sqlalchemy import create_engine, Integer, String, Float, Boolean, Column, DateTime, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import Session, sessionmaker, relationship
+from datetime import datetime, timedelta
+
+app = FastAPI(title="Libris Library System", version="2.4.0")
+
+# Database Configuration (SQLite3 relational connector)
+DB_URL = "sqlite:///./library.db"
+
+engine = create_engine(DB_URL, connect_args={"check_same_thread": False})
+LocalSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+# 🧱 Relational Database Schema Definitions
+class Book(Base):
+    __tablename__ = "books"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String(255))
+    genre = Column(String(255))
+    author = Column(String(255))
+    price = Column(Float)
+    total_quantity = Column(Integer)
+    available_quantity = Column(Integer)
+    issued_books = relationship("IssuedBook", back_populates="book")
+
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255))
+    email = Column(String(255), unique=True)
+    issued_books = relationship("IssuedBook", back_populates="user")
+
+class IssuedBook(Base):
+    __tablename__ = "issued_books"
+    id = Column(Integer, primary_key=True, index=True)
+    book_id = Column(Integer, ForeignKey("books.id"))
+    user_id = Column(Integer, ForeignKey("users.id"))
+    issued_by = Column(String(255))
+    issued_to = Column(String(255))
+    issued_time = Column(DateTime, default=datetime.utcnow)
+    due_date = Column(DateTime)
+    returned_time = Column(DateTime, nullable=True)
+    fine_amount = Column(Float, default=0.0)
+    status = Column(String(50), default="Issued")
+
+Base.metadata.create_all(bind=engine)
+
+# Schemas
+class CreateBook(BaseModel):
+    title: str
+    genre: str
+    author: str
+    price: float
+    total_quantity: int 
+
+def get_db():
+    db = LocalSession()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# ✅ Add New Book Data
+@app.post("/books")
+def add_book(book: CreateBook, db: Session = Depends(get_db)):
+    new_book = Book(**book.dict(), available_quantity=book.total_quantity)
+    db.add(new_book)
+    db.commit()
+    db.refresh(new_book)
+    return {"Message": "Book added successfully!", "data": new_book}
+
+# ✅ READ ALL Books
+@app.get("/books")
+def get_all_books(db: Session = Depends(get_db)):
+    return {"Count": db.query(Book).count(), "Data": db.query(Book).all()}`;
+
+    const flaskSourcePy = `# ======================================================================================
+# 📝 Flask Library Management System (CRUD) - SQLite/SQL Database version
+# ======================================================================================
+from flask import Flask, jsonify, request, abort
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime, timedelta
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./library.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+# 🧱 Database Models
+class Book(db.Model):
+    __tablename__ = "books"
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    genre = db.Column(db.String(255), nullable=False)
+    author = db.Column(db.String(255), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    total_quantity = db.Column(db.Integer, nullable=False)
+    available_quantity = db.Column(db.Integer, nullable=False)
+
+    def to_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+class User(db.Model):
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=False)
+
+class IssuedBook(db.Model):
+    __tablename__ = "issued_books"
+    id = db.Column(db.Integer, primary_key=True)
+    book_id = db.Column(db.Integer, db.ForeignKey("books.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    issued_by = db.Column(db.String(255), nullable=False)
+    issued_to = db.Column(db.String(255), nullable=False)
+    issued_time = db.Column(db.DateTime, default=datetime.utcnow)
+    due_date = db.Column(db.DateTime, nullable=False)
+    returned_time = db.Column(db.DateTime, nullable=True)
+    fine_amount = db.Column(db.Float, default=0.0)
+    status = db.Column(db.String(50), default="Issued")
+
+with app.app_context():
+    db.create_all()
+
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({"Message": "Flask Library API Working"}), 200
+
+@app.route("/books", methods=["POST"])
+def add_book():
+    data = request.get_json() or {}
+    new_book = Book(
+        title=data["title"], genre=data["genre"], author=data["author"],
+        price=float(data["price"]), total_quantity=int(data["total_quantity"]),
+        available_quantity=int(data["total_quantity"])
+    )
+    db.session.add(new_book)
+    db.session.commit()
+    return jsonify({"Message": "Book added successfully!", "data": new_book.to_dict()}), 200
+`;
+
+    function togglePythonFile(fileType) {
+      state.activeFile = fileType;
+      const codeEl = document.getElementById("python-code-sandbox");
+      const btnFast = document.getElementById("btn-file-fastapi");
+      const btnFlask = document.getElementById("btn-file-flask");
+
+      if (fileType === 'fastapi') {
+        if (codeEl) codeEl.innerText = fastapiSourcePy;
+        if (btnFast) btnFast.className = "px-3.5 py-1 text-[11px] font-bold tracking-tight rounded-md transition-all cursor-pointer flex items-center gap-2 bg-[#c4a47c]/20 text-[#c4a47c]";
+        if (btnFlask) btnFlask.className = "px-3.5 py-1 text-[11px] font-bold tracking-tight rounded-md transition-all cursor-pointer flex items-center gap-2 text-slate-400 hover:text-white";
+      } else {
+        if (codeEl) codeEl.innerText = flaskSourcePy;
+        if (btnFlask) btnFlask.className = "px-3.5 py-1 text-[11px] font-bold tracking-tight rounded-md transition-all cursor-pointer flex items-center gap-2 bg-[#c4a47c]/20 text-[#c4a47c]";
+        if (btnFast) btnFast.className = "px-3.5 py-1 text-[11px] font-bold tracking-tight rounded-md transition-all cursor-pointer flex items-center gap-2 text-slate-400 hover:text-white";
+      }
+      populateSimulatorButtons();
+    }
+
+    function copyPythonCode() {
+      const codeText = state.activeFile === 'fastapi' ? fastapiSourcePy : flaskSourcePy;
+      navigator.clipboard.writeText(codeText);
+      const btn = document.getElementById("copy-code-btn");
+      if (!btn) return;
+      btn.innerHTML = `<i data-lucide="check" class="h-3.5 w-3.5 text-emerald-400"></i> COPIED!`;
+      lucide.createIcons();
+      setTimeout(() => {
+        btn.innerHTML = `<i data-lucide="copy" class="h-3.5 w-3.5"></i> COPY CODE`;
+        lucide.createIcons();
+      }, 2000);
+    }
+
+    const simulatorEndpoints = [
+      { label: "Main Entry Index", route: "GET /", badge: "GET", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" },
+      { label: "List Active Inventory", route: "GET /books", badge: "GET", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" },
+      { label: "Register New Volume", route: "POST /books", badge: "POST", color: "text-sky-400 bg-sky-500/10 border-sky-500/20" },
+      { label: "Loan Out Book Record", route: "POST /issue-book/{b_id}/{u_id}", badge: "POST", color: "text-sky-400 bg-sky-500/10 border-sky-500/20" },
+      { label: "Close Active Book Loan", route: "POST /return-book/{b_id}", badge: "POST", color: "text-sky-400 bg-sky-500/10 border-sky-500/20" }
+    ];
+
+    function populateSimulatorButtons() {
+      const container = document.getElementById("api-interactive-buttons");
+      if (!container) return;
+      container.innerHTML = "";
+      simulatorEndpoints.forEach((ep, index) => {
+        container.innerHTML += `
+          <button onclick="runSimulatorCall('${ep.route}')" class="w-full flex items-center justify-between p-3 rounded-xl border border-white/5 bg-[#0b0b0e] hover:border-white/20 transition-all text-left cursor-pointer">
+            <div class="flex flex-col gap-0.5">
+              <span class="text-xs font-semibold text-white">${ep.label}</span>
+              <span class="text-[10px] font-mono text-slate-500 mt-1">${ep.route}</span>
+            </div>
+            <span class="text-[9px] px-2 py-0.5 rounded border ${ep.color} font-bold">${ep.badge}</span>
+          </button>
+        `;
+      });
+    }
+
+    function runSimulatorCall(route) {
+      const terminal = document.getElementById("terminal-output-panel");
+      if (!terminal) return;
+      const timeStr = new Date().toISOString();
+      const returnTimeStr = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
+      
+      let outText = "";
+
+      switch(route) {
+        case 'GET /':
+          outText = `>>> import requests
+>>> response = requests.get("http://localhost:3000/")
+>>> print(response.status_code)
+200 OK
+>>> print(response.json())
+{
+  "Message": "Library Management System Index"
+}`;
+          break;
+        case 'GET /books':
+          outText = `>>> import requests
+>>> response = requests.get("http://localhost:3000/books")
+>>> print(response.json())
+{
+  "Count": 6,
+  "Data": [
+    {"id": 1, "title": "Dune", "author": "Frank Herbert", "genre": "Sci-Fi", "price": 599.0, "total_quantity": 5, "available_quantity": 4},
+    {"id": 2, "title": "1984", "author": "George Orwell", "genre": "Dystopian", "price": 399.0, "total_quantity": 3, "available_quantity": 3},
+    {"id": 3, "title": "To Kill a Mockingbird", "author": "Harper Lee", "genre": "Fiction", "price": 450.0, "total_quantity": 4, "available_quantity": 4}
+  ]
+}`;
+          break;
+        case 'POST /books':
+          outText = `>>> import requests
+>>> body = {"title": "Neuromancer", "genre": "Cyberpunk", "author": "William Gibson", "price": 499.0, "total_quantity": 3}
+>>> res = requests.post("http://localhost:3000/books", json=body)
+>>> print(res.json())
+{
+  "Message": "Book added successfully!",
+  "data": {
+    "id": 5,
+    "title": "Neuromancer",
+    "genre": "Cyberpunk",
+    "author": "William Gibson",
+    "price": 499.0,
+    "total_quantity": 3,
+    "available_quantity": 3
+  }
+}`;
+          break;
+        case 'POST /issue-book/{b_id}/{u_id}':
+          outText = `>>> import requests
+>>> # Lending out Dune (B-1) to Reader Alan Turing (U-3)
+>>> res = requests.post("http://localhost:3000/issue-book/1/3?days=14&issued_by=Librarian")
+>>> print(res.json())
+{
+  "Message": "Book issued successfully",
+  "book": "Dune",
+  "issued to": "Alan Turing",
+  "issued by": "Librarian",
+  "issued time": "${timeStr}",
+  "return before": "${returnTimeStr}"
+}`;
+          break;
+        case 'POST /return-book/{b_id}':
+          outText = `>>> import requests
+>>> # Return transaction processing
+>>> res = requests.post("http://localhost:3000/return-book/1")
+>>> print(res.json())
+{
+  "Message": "Book returned successfully",
+  "book": "Dune",
+  "returned_time": "${timeStr}",
+  "status": "Returned",
+  "fine amount": 0.0
+}`;
+          break;
+      }
+
+      terminal.innerHTML = `<pre class="whitespace-pre overflow-x-auto">${outText}</pre>`;
+    }
+
+    // ==========================================
+    // 🔒 SECURED REAL-TIME AUTHENTICATED SYSTEM DRIVERS
+    // ==========================================
+    let availableOperators = ["Admin", "Librarian", "Librarian Admin", "Harsha Vardhan"];
+
+    async function loadOperators() {
+      try {
+        const response = await fetch("/api/operators");
+        if (response.ok) {
+          const list = await response.json();
+          if (Array.isArray(list) && list.length > 0) {
+            availableOperators = list;
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load backend operators", err);
+      }
+      renderPresetChips();
+    }
+
+    function renderPresetChips() {
+      const container = document.getElementById("login-operator-preset-chips");
+      if (!container) return;
+      container.innerHTML = "";
+      availableOperators.forEach(name => {
+        container.innerHTML += `
+          <button type="button" onclick="selectOperatorPreset('${name}')" class="px-2.5 py-1 bg-white/5 hover:bg-[#c4a47c]/25 border border-white/10 hover:border-[#c4a47c]/30 rounded-lg text-[10px] text-slate-300 hover:text-white font-semibold transition-all cursor-pointer">
+            ${name}
+          </button>
+        `;
+      });
+    }
+
+    function selectOperatorPreset(name) {
+      const input = document.getElementById("login-username");
+      input.value = name;
+      document.getElementById("autocomplete-suggestions").classList.add("hidden");
+      document.getElementById("login-password").focus();
+    }
+
+    function handleUsernameAutocomplete(val) {
+      const suggestionsContainer = document.getElementById("autocomplete-suggestions");
+      if (!val || val.trim() === "") {
+        suggestionsContainer.classList.add("hidden");
+        return;
+      }
+
+      const query = val.toLowerCase();
+      const matches = availableOperators.filter(opt => opt.toLowerCase().includes(query));
+
+      if (matches.length === 0) {
+        suggestionsContainer.classList.add("hidden");
+        return;
+      }
+
+      suggestionsContainer.innerHTML = "";
+      matches.forEach(name => {
+        suggestionsContainer.innerHTML += `
+          <div onclick="selectOperatorPreset('${name}')" class="px-4 py-2 text-xs text-slate-200 hover:bg-[#c4a47c]/10 hover:text-[#c4a47c] cursor-pointer font-mono flex items-center justify-between">
+            <span>${name}</span>
+            <span class="text-[9px] tracking-widest text-[#c4a47c]/40 font-semibold font-sans">Click to select</span>
+          </div>
+        `;
+      });
+      suggestionsContainer.classList.remove("hidden");
+    }
+
+    async function handleSessionSubmit(e) {
+      e.preventDefault();
+      
+      const usernameInput = document.getElementById("login-username");
+      const passwordInput = document.getElementById("login-password");
+      const errorBanner = document.getElementById("login-error-banner");
+      const errorText = document.getElementById("login-error-text");
+
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+
+      errorBanner.classList.add("hidden");
+
+      try {
+        const response = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          sessionStorage.setItem("libris_operator", result.user);
+          applyActiveSession(result.user);
+          
+          usernameInput.value = "";
+          passwordInput.value = "";
+          
+          document.getElementById("login-screen-v2").classList.add("hidden");
+          addLog(`Operator session secured continuously. Granted to operator: ${result.user}`, "system");
+        } else {
+          errorText.innerText = result.message || "Invalid operator PIN credentials.";
+          errorBanner.classList.remove("hidden");
+        }
+      } catch (err) {
+        console.error("Auth error", err);
+        errorText.innerText = "Backend connection failure. Please confirm dev server is online.";
+        errorBanner.classList.remove("hidden");
+      }
+    }
+
+    function applyActiveSession(username) {
+      document.getElementById("operator-badge").innerText = username;
+      const card = document.getElementById("logged-operator-card");
+      if (card) {
+        card.innerText = username;
+      }
+      
+      const issueOpVal = document.getElementById("issue-operator-input");
+      if (issueOpVal) {
+        issueOpVal.value = username;
+      }
+    }
+
+    function logoutOperator() {
+      sessionStorage.removeItem("libris_operator");
+      document.getElementById("operator-badge").innerText = "Unauthorized";
+      const card = document.getElementById("logged-operator-card");
+      if (card) {
+        card.innerText = "Unauthorized";
+      }
+      
+      document.getElementById("login-username").value = "";
+      document.getElementById("login-password").value = "";
+      document.getElementById("login-error-banner").classList.add("hidden");
+      document.getElementById("login-screen-v2").classList.remove("hidden");
+      
+      addLog("Active operator session terminated manually.", "system");
+      lucide.createIcons();
+    }
+
+    function toggleOperatorMenu() {
+      const actions = document.getElementById("operator-dropdown-actions");
+      if (actions) {
+        actions.classList.toggle("hidden");
+      }
+    }
+
+    function handleSwitchAccount() {
+      const actions = document.getElementById("operator-dropdown-actions");
+      if (actions) {
+        actions.classList.add("hidden");
+      }
+      logoutOperator();
+    }
+
+    function handleSignOut() {
+      const actions = document.getElementById("operator-dropdown-actions");
+      if (actions) {
+        actions.classList.add("hidden");
+      }
+      logoutOperator();
+    }
+
+    function checkActiveSession() {
+      const activeOp = sessionStorage.getItem("libris_operator");
+      if (activeOp) {
+        applyActiveSession(activeOp);
+        document.getElementById("login-screen-v2").classList.add("hidden");
+      } else {
+        document.getElementById("login-screen-v2").classList.remove("hidden");
+      }
+    }
+
+    async function syncFromBackend() {
+      try {
+        console.log("Synchronizing state from MySQL database...");
+        
+        // Fetch books from backend
+        const resBooks = await fetch("/books");
+        if (resBooks.ok) {
+          const dataBooks = await resBooks.json();
+          if (dataBooks && dataBooks.Data) {
+            state.books = dataBooks.Data;
+            saveState('libris_books', state.books);
+          }
+        }
+        
+        // Fetch users from backend
+        const resUsers = await fetch("/users");
+        if (resUsers.ok) {
+          const dataUsers = await resUsers.json();
+          if (dataUsers && dataUsers.data) {
+            state.users = dataUsers.data;
+            saveState('libris_users', state.users);
+          }
+        }
+
+        // Fetch transactional history from backend
+        const resHistory = await fetch("/issue-history");
+        if (resHistory.ok) {
+          const dataHistory = await resHistory.json();
+          if (dataHistory && dataHistory.data) {
+            state.history = dataHistory.data;
+            saveState('libris_history', state.history);
+          }
+        }
+      } catch (err) {
+        console.warn("Could not synchronize with SQL database, fallback localState active.", err);
+      } finally {
+        renderBooksTable();
+        renderUsersTable();
+        renderHistoryTable();
+        populateIssueDropdowns();
+        updateDashboardUI();
+      }
+    }
+
+    // On Load executions
+    window.onload = async function() {
+      loadOperators();
+      checkActiveSession();
+      lucide.createIcons();
+      renderLogs();
+      await syncFromBackend();
+    };
+  </script>
+</body>
+</html>

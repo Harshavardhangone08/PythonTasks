@@ -1,0 +1,50 @@
+<!-- Tab 4: CIRCULATION SERVICE COUNTER (ISSUE BOOK FORM) -->
+<div id="tab-issue" class="tab-content space-y-6">
+  <div class="max-w-xl mx-auto">
+    <div class="glass-panel p-8 rounded-2xl space-y-6 relative">
+      <div class="space-y-1 text-center">
+        <div class="p-3 bg-[#c4a47c]/10 text-[#c4a47c] rounded-full w-fit mx-auto border border-[#c4a47c]/15">
+          <i data-lucide="arrow-left-right" class="h-6 w-6"></i>
+        </div>
+        <h3 class="font-serif-lux text-lg font-bold text-white mt-3">Book Lending Desk</h3>
+        <p class="text-xs text-slate-400">Generate an authenticated relational issue transaction against system database schemas.</p>
+      </div>
+
+      <form id="issue-book-form" onsubmit="handleIssueBook(event)" class="space-y-4">
+        <div class="space-y-1.5">
+          <label class="text-[10px] text-slate-400 tracking-widest font-mono">Select target reader</label>
+          <select id="issue-user-select" class="w-full bg-[#101014] border border-white/10 rounded-xl px-4 py-3 text-xs text-slate-200" required>
+            <option value="">-- Choose reader account --</option>
+            <!-- Rendered dynamically -->
+          </select>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="text-[10px] text-slate-400 tracking-widest font-mono">Select book title</label>
+          <select id="issue-book-select" class="w-full bg-[#101014] border border-white/10 rounded-xl px-4 py-3 text-xs text-slate-200" required>
+            <option value="">-- Choose available book --</option>
+            <!-- Rendered dynamically -->
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label class="text-[10px] text-slate-400 tracking-widest font-mono">Loan period (days)</label>
+            <input type="number" id="issue-days-input" min="1" max="180" value="14" class="w-full bg-[#101014] border border-white/10 rounded-xl px-4 py-3 text-xs text-white" required>
+          </div>
+          
+          <div class="space-y-1.5">
+            <label class="text-[10px] text-slate-400 tracking-widest font-mono">Authorized operator name</label>
+            <input type="text" id="issue-operator-input" value="Librarian Admin" class="w-full bg-[#101014] border border-white/10 rounded-xl px-4 py-3 text-xs text-white" required>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full py-3.5 bg-[#c4a47c] hover:bg-[#b08e62] text-black font-semibold rounded-xl text-xs tracking-widest transition-all cursor-pointer">
+            Issue book record
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

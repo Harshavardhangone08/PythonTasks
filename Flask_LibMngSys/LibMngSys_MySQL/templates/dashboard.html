@@ -1,0 +1,108 @@
+<!-- Tab 1: DASHBOARD VIEW -->
+<div id="tab-dashboard" class="tab-content active space-y-6">
+  
+  <!-- Key Metrics Cards -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="glass-panel p-5 rounded-2xl flex items-center justify-between relative overflow-hidden">
+      <div class="space-y-1">
+        <span class="text-[12px] font-mono tracking-widest text-[#c4a47c]">Total titles</span>
+        <h3 class="text-2xl font-bold font-mono tracking-tight" id="metric-total-books">0</h3>
+      </div>
+      <div class="p-3 bg-[#c4a47c]/10 text-[#c4a47c] rounded-xl"><i data-lucide="book-open" class="h-6 w-6"></i></div>
+    </div>
+
+    <div class="glass-panel p-5 rounded-2xl flex items-center justify-between relative overflow-hidden">
+      <div class="space-y-1">
+        <span class="text-[12px] font-mono tracking-widest text-emerald-400">In stock</span>
+        <h3 class="text-2xl font-bold font-mono tracking-tight text-emerald-400" id="metric-stock-books">0</h3>
+      </div>
+      <div class="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl"><i data-lucide="hard-drive" class="h-6 w-6"></i></div>
+    </div>
+
+    <div class="glass-panel p-5 rounded-2xl flex items-center justify-between relative overflow-hidden">
+      <div class="space-y-1">
+        <span class="text-[12px] font-mono tracking-widest text-amber-500">Lent active</span>
+        <h3 class="text-2xl font-bold font-mono tracking-tight text-amber-500" id="metric-issued-books">0</h3>
+      </div>
+      <div class="p-3 bg-amber-500/10 text-amber-500 rounded-xl"><i data-lucide="arrow-left-right" class="h-6 w-6"></i></div>
+    </div>
+
+    <div class="glass-panel p-5 rounded-2xl flex items-center justify-between relative overflow-hidden">
+      <div class="space-y-1">
+        <span class="text-[12px] font-mono tracking-widest text-rose-400">Fees tracked</span>
+        <h3 class="text-2xl font-bold font-mono tracking-tight text-rose-400" id="metric-fees">₹0</h3>
+      </div>
+      <div class="p-3 bg-rose-500/10 text-rose-400 rounded-xl"><i data-lucide="indian-rupee" class="h-6 w-6"></i></div>
+    </div>
+  </div>
+
+  <!-- Dashboard Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    
+    <!-- Fine calculations standard information box -->
+    <div class="lg:col-span-8 flex flex-col gap-6">
+      <div class="glass-panel rounded-2xl p-6 relative">
+        <h3 class="font-serif-lux text-base font-bold text-[#c4a47c] flex items-center gap-2">
+          <i data-lucide="alert-triangle" class="h-4.5 w-4.5"></i>
+          Circulation and Overdue Penalty Standards
+        </h3>
+        <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+          Fees calculation rules are synchronized automatically against the local transactional ledger history. 
+          Any book loan transaction exceeding the allocated(Issue) period incurs an immediate penalty daily multiplier.
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
+          <div class="bg-black/30 p-4 rounded-xl border border-white/5 space-y-1">
+            <div class="text-[11px] text-slate-400 tracking-widest font-mono">Regular return period</div>
+            <div class="text-sm font-bold">6 Days Standard</div>
+          </div>
+          <div class="bg-black/30 p-4 rounded-xl border border-white/5 space-y-1">
+            <div class="text-[11px] text-slate-400 tracking-widest font-mono">Overdue daily rate</div>
+            <div class="text-sm font-bold text-rose-400">₹10.00 / Overdue Day</div>
+          </div>
+          <div class="bg-black/30 p-4 rounded-xl border border-white/5 space-y-1">
+            <div class="text-[11px] text-slate-400 tracking-widest font-mono">Max outstanding cap</div>
+            <div class="text-sm font-bold text-[#c4a47c]">₹500 Per Transaction</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Beautiful Live Activity Console -->
+      <div class="glass-panel rounded-2xl p-6">
+        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+          <h3 class="font-serif-lux text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="terminal" class="h-4.5 w-4.5 text-[#c4a47c]"></i>
+            Core System Event Logs
+          </h3>
+          <span class="text-[9px] uppercase font-mono bg-[#c4a47c]/10 text-[#c4a47c] px-2 py-0.5 rounded border border-[#c4a47c]/10">LIVE STATE</span>
+        </div>
+        
+        <div class="pt-4 max-h-[300px] overflow-y-auto space-y-4 relative log-stream" id="logs-container">
+          <!-- Inside will render logs -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick status ledger panel -->
+    <div class="lg:col-span-4 space-y-6">
+      <div class="glass-panel rounded-2xl p-6 space-y-4 flex flex-col justify-between">
+        <div>
+          <h3 class="font-serif-lux text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="users" class="h-4.5 w-4.5 text-[#c4a47c]"></i>
+            Internal Registry Summary
+          </h3>
+          <p class="text-xs text-slate-400 mt-1">Reader accounts register</p>
+        </div>
+
+        <div class="divide-y divide-white/5" id="mini-readers-list">
+          <!-- Mini view of readers -->
+        </div>
+
+        <button onclick="switchTab('users')" class="w-full mt-2 py-2.5 text-xs font-bold bg-white/5 hover:bg-[#c4a47c]/10 border border-white/5 text-[#c4a47c] rounded-xl transition-all cursor-pointer">
+          Manage directory
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

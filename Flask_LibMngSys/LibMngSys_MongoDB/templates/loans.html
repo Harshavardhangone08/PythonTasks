@@ -1,0 +1,39 @@
+<!-- Tab 5: LOAN TRANSACTIONS LEDGER & RETURNS VIEW -->
+<div id="tab-history" class="tab-content space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <span class="text-xs tracking-wider text-slate-400 font-mono">Status tracker:</span>
+      <select id="loan-status-filter" onchange="renderHistoryTable()" class="bg-[#101014] border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-300">
+        <option value="ALL">All transactions</option>
+        <option value="Issued">Active loans (Issued)</option>
+        <option value="Returned">Successfully returned</option>
+        <option value="Late Return">Return exceeds due date</option>
+      </select>
+    </div>
+    
+    <div class="text-xs font-mono text-[#c4a47c] bg-[#c4a47c]/10 border border-[#c4a47c]/10 px-4 py-2.5 rounded-xl">
+      Fine rate factor: ₹10 / Overdue Day
+    </div>
+  </div>
+
+  <!-- History Ledger Table -->
+  <div class="glass-panel rounded-2xl overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-white/10 bg-black/40 text-[10px] font-mono tracking-widest text-[#c4a47c]">
+            <th class="py-4.5 px-6">Transaction ID & book</th>
+            <th class="py-4.5 px-6">Issued reader</th>
+            <th class="py-4.5 px-6">Time details</th>
+            <th class="py-4.5 px-6">Status state</th>
+            <th class="py-4.5 px-6 text-right">Fines calculated</th>
+            <th class="py-4.5 px-6 text-right">Ledger actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5 text-xs text-slate-200" id="loans-table-body">
+          <!-- Loan records listed here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
