@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="table-container">
+
+    <div style="display:flex;
+    justify-content:space-between;
+    margin-bottom:20px;">
+
+        <h2>Books Collection</h2>
+
+        <a href="/add-book" class="btn">
+            <i class="fa fa-plus"></i> Add Book
+        </a>
+
+    </div>
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Genre</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Available</th>
+            <th>Status</th>
+            <th class="action-column">Action</th>
+        </tr>
+
+        {% for book in books %}
+
+        <tr>
+
+            <td>{{ book.id }}</td>
+
+            <td>{{ book.title }}</td>
+
+            <td>{{ book.author }}</td>
+
+            <td>{{ book.genre }}</td>
+
+            <td>₹{{ book.price }}</td>
+
+            <td>{{ book.total_quantity }}</td>
+
+            <td>{{ book.available_quantity }}</td>
+
+            <td>
+
+                {% if book.available_quantity > 0 %}
+
+                    <span class="badge badge-returned">
+                        Available
+                    </span>
+
+                {% else %}
+
+                    <span class="badge badge-late">
+                        Out of Stock
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+            <td class="action-column">
+
+                <a href="/delete-book/{{ book.id }}"
+                class="btn btn-danger"
+                
+                onclick="return confirm('Are you sure you want to delete this book?');">
+                <i class="fa fa-trash"></i>
+                    Delete
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}
+
+<script>
+
+function confirmDelete(bookTitle){
+
+    return confirm(
+        "Are you sure you want to delete the book:\n\n"
+        + bookTitle +
+        " ?"
+    );
+
+}
+
+</script>

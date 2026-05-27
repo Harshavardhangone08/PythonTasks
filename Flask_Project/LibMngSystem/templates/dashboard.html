@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="hero">
+
+    <h1>
+        Welcome to LibraryMS
+        <span class="float-icon">📚</span>
+    </h1>
+
+    <p id="typing-text"></p>
+
+</div>
+
+<div class="cards">
+
+    <div class="card">
+
+        <h2>
+            <i class="fa fa-book dashboard-icon"></i>
+            Total Books
+        </h2>
+
+        <h1>{{ total_books }}</h1>
+
+    </div>
+
+    <div class="card">
+
+        <h2>
+            <i class="fa fa-users dashboard-icon"></i>
+            Total Users
+        </h2>
+
+        <h1>{{ total_users }}</h1>
+
+    </div>
+
+    <div class="card">
+
+        <h2>
+            <i class="fa fa-clock dashboard-icon"></i>
+            Issued Books
+        </h2>
+
+        <h1>{{ issued_books }}</h1>
+
+    </div>
+
+</div>
+{% endblock %}
+
+<script>
+
+const text =
+"Smart Library Management System with Book Tracking, Fine Calculation, User Management and Real-Time Analytics.";
+
+let i = 0;
+
+function typeWriter(){
+
+    if(i < text.length){
+
+        document.getElementById("typing-text").innerHTML += text.charAt(i);
+
+        i++;
+
+        setTimeout(typeWriter, 35);
+    }
+}
+
+window.onload = typeWriter;
+
+</script>

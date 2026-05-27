@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="table-container">
+
+    <div style="display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;">
+
+        <h2>
+            <i class="fa fa-clock"></i>
+            Issued Books
+        </h2>
+
+    </div>
+
+    <table>
+
+        <tr>
+
+            <th>Issue ID</th>
+            <th>Book ID</th>
+            <th>User ID</th>
+            <th>Issued To</th>
+            <th>Issued By</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Fine</th>
+            <th>Action</th>
+
+        </tr>
+
+        {% for book in books %}
+
+        <tr>
+
+            <td>#{{ book.id }}</td>
+
+            <td>{{ book.book_id }}</td>
+
+            <td>{{ book.user_id }}</td>
+
+            <td>{{ book.issued_to }}</td>
+
+            <td>{{ book.issued_by }}</td>
+
+            <td>{{ book.due_date.strftime('%d-%m-%Y') }}</td>
+
+            <td>
+
+                {% if book.status == "Issued" %}
+
+                    <span class="badge badge-issued">
+                        Issued
+                    </span>
+
+                {% elif book.status == "Returned" %}
+
+                    <span class="badge badge-returned">
+                        Returned
+                    </span>
+
+                {% else %}
+
+                    <span class="badge badge-late">
+                        Late Return
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                ₹{{ book.fine_amount }}
+
+            </td>
+
+            <td>
+
+                {% if book.status == "Issued" %}
+
+                <a href="/return-book/{{ book.id }}"
+                class="btn btn-success">
+
+                    Return
+
+                </a>
+
+                {% else %}
+
+                <span style="color:gray;">
+                    Completed
+                </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}

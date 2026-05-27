@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="table-container">
+
+    <div style="display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;">
+
+        <h2>
+            <i class="fa fa-history"></i>
+            Library Transaction History
+        </h2>
+
+    </div>
+
+    <table>
+
+        <tr>
+
+            <th>Issue ID</th>
+            <th>Book ID</th>
+            <th>User ID</th>
+            <th>Issued Time</th>
+            <th>Returned Time</th>
+            <th>Status</th>
+            <th>Fine</th>
+
+        </tr>
+
+        {% for item in history %}
+
+        <tr>
+
+            <td>#{{ item.id }}</td>
+
+            <td>{{ item.book_id }}</td>
+
+            <td>{{ item.user_id }}</td>
+
+            <td>
+
+                {{ item.issued_time.strftime('%d-%m-%Y %H:%M') }}
+
+            </td>
+
+            <td>
+
+                {% if item.returned_time %}
+
+                    {{ item.returned_time.strftime('%d-%m-%Y %H:%M') }}
+
+                {% else %}
+
+                    Not Returned
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                {% if item.status == "Issued" %}
+
+                    <span class="badge badge-issued">
+                        Issued
+                    </span>
+
+                {% elif item.status == "Returned" %}
+
+                    <span class="badge badge-returned">
+                        Returned
+                    </span>
+
+                {% else %}
+
+                    <span class="badge badge-late">
+                        Late Return
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                ₹{{ item.fine_amount }}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}

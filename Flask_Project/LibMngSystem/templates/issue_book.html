@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="form-container">
+
+    <h2 style="margin-bottom:30px;">
+        <i class="fa fa-book-open"></i>
+        Issue Book
+    </h2>
+
+    <form method="POST">
+
+        <!-- BOOK SELECTION -->
+
+        <div class="form-group">
+
+            <label>Select Book</label>
+
+            <select name="book_id"
+            class="form-control"
+            required>
+
+                {% for book in books %}
+
+                <option value="{{ book.id }}">
+
+                    {{ book.title }}
+                    -
+                    Available:
+                    {{ book.available_quantity }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+        <!-- USER -->
+
+        <div class="form-group">
+
+            <label>Select User</label>
+
+            <select name="user_id"
+            class="form-control"
+            required>
+
+                {% for user in users %}
+
+                <option value="{{ user.id }}">
+
+                    {{ user.name }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+        <!-- ISSUED BY -->
+
+        <div class="form-group">
+
+            <label>Issued By</label>
+
+            <input type="text"
+            name="issued_by"
+            class="form-control"
+            placeholder="Enter librarian/admin name"
+            required>
+
+        </div>
+
+        <!-- DAYS -->
+
+        <div class="form-group">
+
+            <label>Return Duration (Days)</label>
+
+            <input type="number"
+            name="days"
+            class="form-control"
+            placeholder="Enter number of days"
+            required>
+
+        </div>
+
+        <button class="btn btn-success">
+
+            <i class="fa fa-check"></i>
+
+            Issue Book
+
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

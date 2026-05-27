@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Library Management System</title>
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<!-- ======================================================
+SIDEBAR
+====================================================== -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        📚 LibraryMS
+    </div>
+
+    <a href="/">
+        <i class="fa fa-chart-line"></i> Dashboard
+    </a>
+
+    <a href="/books">
+        <i class="fa fa-book"></i> Books
+    </a>
+
+    <a href="/add-book">
+        <i class="fa fa-plus"></i> Add Book
+    </a>
+
+    <a href="/users">
+        <i class="fa fa-users"></i> Users
+    </a>
+
+    <a href="/add-user">
+        <i class="fa fa-user-plus"></i> Add User
+    </a>
+
+    <a href="/issue-book">
+        <i class="fa fa-book-open"></i> Issue Book
+    </a>
+
+    <a href="/issued-books">
+        <i class="fa fa-clock"></i> Issued Books
+    </a>
+
+    <a href="/history">
+        <i class="fa fa-history"></i> History
+    </a>
+
+</div>
+
+<!-- ======================================================
+MAIN CONTENT
+====================================================== -->
+
+<div class="main">
+
+    <div class="topbar">
+
+        <h1>Library Management System</h1>
+
+        <div class="search-box">
+
+            <form action="/search" method="GET">
+
+                <input type="text"
+                placeholder="Search books..."
+                name="query" required>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="flash">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+</body>
+</html>

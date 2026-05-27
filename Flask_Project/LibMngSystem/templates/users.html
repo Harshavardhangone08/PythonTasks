@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="table-container">
+
+    <div style="display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;">
+
+        <h2>
+            <i class="fa fa-users"></i>
+            Library Users
+        </h2>
+
+        <a href="/add-user" class="btn btn-success">
+            <i class="fa fa-user-plus"></i>
+            Add User
+        </a>
+
+    </div>
+
+    <table>
+
+        <tr>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
+        </tr>
+
+        {% for user in users %}
+
+        <tr>
+
+            <td>#{{ user.id }}</td>
+
+            <td>{{ user.name }}</td>
+
+            <td>{{ user.email }}</td>
+
+            <td>
+                <span class="badge badge-returned">
+                    Active
+                </span>
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+{% endblock %}

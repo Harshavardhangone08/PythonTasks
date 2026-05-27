@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="form-container">
+
+    <h2 style="margin-bottom:30px;">
+
+        <i class="fa fa-book"></i>
+
+        Add New Book
+
+    </h2>
+
+    <form method="POST">
+
+        <div class="form-group">
+
+            <label>Book Title</label>
+
+            <input type="text"
+            name="title"
+            class="form-control"
+            placeholder="Enter book title"
+            required>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Author Name</label>
+
+            <input type="text"
+            name="author"
+            class="form-control"
+            placeholder="Enter author name"
+            required>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Genre</label>
+
+            <input type="text"
+            name="genre"
+            class="form-control"
+            placeholder="Enter genre"
+            required>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Price</label>
+
+            <input type="number"
+            step="0.01"
+            name="price"
+            class="form-control"
+            placeholder="Enter price"
+            required>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Total Quantity</label>
+
+            <input type="number"
+            name="total_quantity"
+            class="form-control"
+            placeholder="Enter quantity"
+            required>
+
+        </div>
+
+        <button class="btn btn-success">
+
+            <i class="fa fa-save"></i>
+
+            Add Book
+
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}
