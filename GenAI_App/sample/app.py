@@ -1,13 +1,14 @@
 # To run this code you need to install the following dependencies:
-# pip install google-genai
+# pip install google-genai python-dotnet
 
 import os
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
 
-
+#load environment variables from .env file
 load_dotenv()
+
 def generate(question:str):
     client = genai.Client(
         api_key=os.environ.get("GEMINI_API_KEY"),
