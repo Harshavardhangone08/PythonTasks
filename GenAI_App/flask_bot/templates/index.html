@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Chat Assistant</title>
+    <!-- Inter Font and JetBrains Mono for Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- PrismJS for high-fidelity code highlight -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="theme-dark">
+    <div class="app-container" id="app-viewport">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-area">
+                    <div class="logo-icon">
+                        <i data-lucide="sparkles"></i>
+                    </div>
+                    <span class="logo-text">Aura Chat</span>
+                </div>
+                <button class="icon-btn close-sidebar-btn" id="hide-sidebar-btn">
+                    <i data-lucide="chevrons-left"></i>
+                </button>
+            </div>
+
+            <button class="new-chat-btn" id="new-chat-btn">
+                <i data-lucide="plus-circle"></i>
+                <span>New Session</span>
+            </button>
+
+            <!-- Chat History Thread List -->
+            <div class="history-section">
+                <div class="section-label">History</div>
+                <div class="thread-list" id="thread-list">
+                    <div class="thread-item active">
+                        <i data-lucide="message-square" class="thread-icon"></i>
+                        <span class="thread-title">Explain Core Decorators</span>
+                    </div>
+                    <div class="thread-item">
+                        <i data-lucide="message-square" class="thread-icon"></i>
+                        <span class="thread-title">CSS Grid vs Flexbox</span>
+                    </div>
+                    <div class="thread-item">
+                        <i data-lucide="message-square" class="thread-icon"></i>
+                        <span class="thread-title">REST API Best Practices</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Footer & Controls -->
+            <div class="sidebar-footer">
+                <div class="quick-stats">
+                    <div class="stat-item">
+                        <span class="stat-num">Aura AI Node</span>
+                        <span class="stat-status active-dot">Connected</span>
+                    </div>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">AU</div>
+                    <div class="user-info">
+                        <span class="username">Aether Developer</span>
+                        <span class="user-role">Workspace User</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Canvas Area -->
+        <main class="main-canvas">
+            
+            <!-- App Header -->
+            <header class="app-header">
+                <div class="header-left">
+                    <button class="icon-btn" id="show-sidebar-btn">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <div class="current-chat-info">
+                        <h1 class="chat-title" id="current-chat-title">New Discussion</h1>
+                        <span class="chat-status-text">Ready to assist</span>
+                    </div>
+                </div>
+                
+                <div class="header-right">
+                    <div class="meta-tag">
+                        <span class="dot green"></span>
+                        <span class="meta-label">Core Engine Online</span>
+                    </div>
+                    <button class="icon-btn theme-toggle" id="theme-toggle-btn">
+                        <i data-lucide="sun" id="theme-icon-sun" class="hidden"></i>
+                        <i data-lucide="moon" id="theme-icon-moon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Chat Messages Container -->
+            <div class="chat-messages-scroll" id="chat-scroller">
+                <div class="chat-messages" id="chat-messages-container">
+                    
+                    <!-- Welcome Screen -->
+                    <div class="welcome-screen" id="welcome-screen">
+                        <div class="sparkle-glow">
+                            <i data-lucide="sparkle" class="large-icon"></i>
+                        </div>
+                        <h2>What's on your mind today?</h2>
+                        <p class="welcome-subtitle">Ask questions, design layouts, debug models, or generate solutions. Powered by Aura Core connection.</p>
+                        
+                        <!-- Suggestion Bento Grid -->
+                        <div class="suggestions-grid">
+                            <div class="suggestion-card" onclick="populatePrompt('Explain function decorators with a short code snippet.')">
+                                <div class="card-header-icon blue">
+                                    <i data-lucide="terminal"></i>
+                                </div>
+                                <div class="suggestion-text">
+                                    <strong>Decorators Syntax</strong>
+                                    <span>Learn wrapping syntax and use cases with code.</span>
+                                </div>
+                            </div>
+                            <div class="suggestion-card" onclick="populatePrompt('Design a responsive CSS layout centered card.')">
+                                <div class="card-header-icon green">
+                                    <i data-lucide="layout"></i>
+                                </div>
+                                <div class="suggestion-text">
+                                    <strong>Flexbox & Grid Layout</strong>
+                                    <span>Flexible layout techniques for modern interfaces.</span>
+                                </div>
+                            </div>
+                            <div class="suggestion-card" onclick="populatePrompt('Explain how route decorators manage request pipelines.')">
+                                <div class="card-header-icon orange">
+                                    <i data-lucide="server"></i>
+                                </div>
+                                <div class="suggestion-text">
+                                    <strong>Routes & Handlers</strong>
+                                    <span>Understand endpoints, routing, and controllers.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Thinking Indicator Overlay -->
+            <div class="thinking-wrapper hidden" id="thinking-indicator">
+                <div class="thinking-avatar">
+                    <i data-lucide="sparkles"></i>
+                </div>
+                <div class="thinking-content">
+                    <div class="thinking-bubble">
+                        <span>Thinking</span>
+                        <div class="typing-pulses">
+                            <span class="pulse"></span>
+                            <span class="pulse"></span>
+                            <span class="pulse"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Box Section -->
+            <footer class="app-footer">
+                <form class="input-form" id="input-chat-form" onsubmit="handleChatSubmit(event)">
+                    <div class="input-container">
+                        <textarea 
+                            className="chat-textarea" 
+                            id="user-input-box" 
+                            placeholder="Ask me anything..." 
+                            rows="1"
+                            onkeydown="checkForSubmit(event)"
+                        ></textarea>
+                        
+                        <div class="input-action-bar">
+                            <div class="input-tools">
+                                <button type="button" class="tool-btn" title="Add Attachment">
+                                    <i data-lucide="paperclip"></i>
+                                </button>
+                                <button type="button" class="tool-btn" title="AI Tone Settings">
+                                    <i data-lucide="sliders"></i>
+                                </button>
+                                <button type="button" class="tool-btn text-xs text-mono" id="char-counter">0/1000</button>
+                            </div>
+                            <button type="submit" class="send-btn" id="send-chat-btn">
+                                <i data-lucide="corner-down-left"></i>
+                                <span>Send</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="disclaimer">
+                     Aura Interface • Integrated with Core Service Architecture
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- Script triggers -->
+    <script>
+        // Init Lucide Icons
+        lucide.createIcons();
+
+        // DOM elements
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const themeIconSun = document.getElementById('theme-icon-sun');
+        const themeIconMoon = document.getElementById('theme-icon-moon');
+        const sidebar = document.getElementById('sidebar');
+        const showSidebarBtn = document.getElementById('show-sidebar-btn');
+        const hideSidebarBtn = document.getElementById('hide-sidebar-btn');
+        const userInputBox = document.getElementById('user-input-box');
+        const sendBtn = document.getElementById('send-chat-btn');
+        const chatScroller = document.getElementById('chat-scroller');
+        const messagesContainer = document.getElementById('chat-messages-container');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const thinkingIndicator = document.getElementById('thinking-indicator');
+        const currentChatTitle = document.getElementById('current-chat-title');
+        const charCounter = document.getElementById('char-counter');
+        const newChatBtn = document.getElementById('new-chat-btn');
+        const threadList = document.getElementById('thread-list');
+
+        // Dark/Light Theme Switching
+        themeToggleBtn.addEventListener('click', () => {
+            const body = document.body;
+            if (body.classList.contains('theme-dark')) {
+                body.classList.remove('theme-dark');
+                body.classList.add('theme-light');
+                themeIconSun.classList.remove('hidden');
+                themeIconMoon.classList.add('hidden');
+            } else {
+                body.classList.remove('theme-light');
+                body.classList.add('theme-dark');
+                themeIconSun.classList.add('hidden');
+                themeIconMoon.classList.remove('hidden');
+            }
+        });
+
+        // Sidebar Navigation Handling
+        showSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.add('sidebar-visible');
+        });
+
+        hideSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.remove('sidebar-visible');
+        });
+
+        // Reset conversation
+        newChatBtn.addEventListener('click', () => {
+            messagesContainer.innerHTML = '';
+            messagesContainer.appendChild(welcomeScreen);
+            currentChatTitle.textContent = "New Discussion";
+            welcomeScreen.classList.remove('hidden');
+        });
+
+        // Textarea auto-sizing and character counting
+        userInputBox.addEventListener('input', () => {
+            userInputBox.style.height = 'auto';
+            userInputBox.style.height = (userInputBox.scrollHeight) + 'px';
+            
+            const len = userInputBox.value.length;
+            charCounter.textContent = `${len}/1000`;
+            
+            if (len > 1000) {
+                charCounter.classList.add('text-danger');
+            } else {
+                charCounter.classList.remove('text-danger');
+            }
+        });
+
+        function checkForSubmit(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                document.getElementById('input-chat-form').dispatchEvent(new Event('submit'));
+            }
+        }
+
+        function populatePrompt(text) {
+            userInputBox.value = text;
+            userInputBox.dispatchEvent(new Event('input'));
+            userInputBox.focus();
+        }
+
+        // Add user response dynamically
+        function addMessageBubble(sender, text) {
+            const bubbleRow = document.createElement('div');
+            bubbleRow.className = `message-row ${sender}-row`;
+
+            const avatar = document.createElement('div');
+            avatar.className = `message-avatar ${sender}-avatar`;
+            
+            if (sender === 'user') {
+                avatar.innerHTML = `<i data-lucide="user"></i>`;
+            } else {
+                avatar.innerHTML = `<i data-lucide="sparkles"></i>`;
+            }
+
+            const body = document.createElement('div');
+            body.className = `message-body ${sender}-body`;
+
+            if (sender === 'bot') {
+                // Parse markdown elegantly
+                const parsedText = marked.parse(text);
+                body.innerHTML = `
+                    <div class="message-content">${parsedText}</div>
+                    <div class="message-meta-actions">
+                        <button class="action-mini-btn" onclick="copyMessageText(this)" title="Copy Response">
+                            <i data-lucide="copy"></i><span>Copy</span>
+                        </button>
+                    </div>
+                `;
+            } else {
+                body.innerHTML = `
+                    <div class="message-content"><p>${escapeHTML(text)}</p></div>
+                `;
+            }
+
+            bubbleRow.appendChild(avatar);
+            bubbleRow.appendChild(body);
+            messagesContainer.appendChild(bubbleRow);
+            
+            // Render lucide icons inside bubble
+            lucide.createIcons({node: bubbleRow});
+            
+            // Apply code highlight if code exists
+            if (sender === 'bot') {
+                Prism.highlightAllUnder(body);
+            }
+
+            // Scroll down
+            chatScroller.scrollTop = chatScroller.scrollHeight;
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        // Clipboard copy functionality
+        function copyMessageText(btn) {
+            const messageBody = btn.closest('.message-body').querySelector('.message-content');
+            const range = document.createRange();
+            range.selectNode(messageBody);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            try {
+                document.execCommand('copy');
+                const span = btn.querySelector('span');
+                const icon = btn.querySelector('i');
+                span.textContent = 'Copied!';
+                btn.style.color = '#10b981';
+                setTimeout(() => {
+                    span.textContent = 'Copy';
+                    btn.style.color = '';
+                    lucide.createIcons({node: btn});
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy', err);
+            }
+            window.getSelection().removeAllRanges();
+        }
+
+        // Post connection with backend endpoint
+        async function handleChatSubmit(event) {
+            event.preventDefault();
+            const text = userInputBox.value.trim();
+            if (!text) return;
+
+            // Clear input box
+            userInputBox.value = '';
+            userInputBox.style.height = 'auto';
+            charCounter.textContent = '0/1000';
+
+            // Hide welcome screen if present
+            welcomeScreen.classList.add('hidden');
+
+            // Add User Bubble to Screen
+            addMessageBubble('user', text);
+            
+            // Set title dynamic
+            if (currentChatTitle.textContent === 'New Discussion' || messagesContainer.children.length <= 3) {
+                currentChatTitle.textContent = text.length > 28 ? text.slice(0, 25) + '...' : text;
+                addThreadToSidebarStats(text);
+            }
+
+            // Show Loading Indicator
+            thinkingIndicator.classList.remove('hidden');
+            chatScroller.scrollTop = chatScroller.scrollHeight;
+
+            try {
+                // Post request targetting endpoint `/generate_response` defined in flask/backend file
+                const response = await fetch('/generate_response', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question: text })
+                });
+
+                const data = await response.json();
+                
+                // Hide thinking loader
+                thinkingIndicator.classList.add('hidden');
+
+                if (data.response) {
+                    addMessageBubble('bot', data.response);
+                } else {
+                    addMessageBubble('bot', "The server returned an empty or invalid response.");
+                }
+
+            } catch (err) {
+                thinkingIndicator.classList.add('hidden');
+                addMessageBubble('bot', "Error communicating with backend: " + err.message);
+                console.error(err);
+            }
+        }
+
+        function addThreadToSidebarStats(title) {
+            const formatted = title.length > 25 ? title.slice(0, 22) + '...' : title;
+            const item = document.createElement('div');
+            item.className = 'thread-item';
+            item.innerHTML = `
+                <i data-lucide="message-square" class="thread-icon"></i>
+                <span class="thread-title">${escapeHTML(formatted)}</span>
+            `;
+            // Unactivate old items
+            document.querySelectorAll('.thread-item').forEach(el => el.classList.remove('active'));
+            item.classList.add('active');
+            
+            threadList.insertBefore(item, threadList.firstChild);
+            lucide.createIcons({node: item});
+            
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.thread-item').forEach(el => el.classList.remove('active'));
+                item.classList.add('active');
+                currentChatTitle.textContent = title;
+            });
+        }
+
+        // Attach click handlers to pre-existing items
+        document.querySelectorAll('.thread-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.thread-item').forEach(el => el.classList.remove('active'));
+                item.classList.add('active');
+                currentChatTitle.textContent = item.querySelector('.thread-title').textContent;
+            });
+        });
+    </script>
+</body>
+</html>
